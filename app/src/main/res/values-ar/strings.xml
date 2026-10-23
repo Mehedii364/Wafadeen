@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">وفاء دين</string>
+    <string name="app_tagline">رفيقك الإسلامي الموثوق بدون إنترنت</string>
+    <string name="developer_attribution">Wafa Zone by Mehedi364</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_salah">تعليم الصلاة</string>
+    <string name="nav_quran">القرآن الكريم</string>
+    <string name="nav_hadith">صحيح الحديث</string>
+    <string name="nav_duas">الأدعية والأذكار</string>
+    <string name="nav_tasbih">المسبحة</string>
+    <string name="nav_ramadan">رمضان والتقويم</string>
+    <string name="nav_qibla">القبلة والمواقيت</string>
+    <string name="nav_bookmarks">المحفوظات</string>
+    <string name="nav_settings">الإعدادات</string>
+
+    <!-- General -->
+    <string name="search_hint">بحث…</string>
+    <string name="back">رجوع</string>
+    <string name="close">إغلاق</string>
+    <string name="save">حفظ</string>
+    <string name="saved">تم الحفظ</string>
+    <string name="remove">حذف</string>
+    <string name="share">مشاركة</string>
+    <string name="copied">تم النسخ إلى الحافظة</string>
+    <string name="reset">إعادة ضبط</string>
+    <string name="cancel">إلغاء</string>
+    <string name="confirm">تأكيد</string>
+    <string name="verified_label">موثق ومعتمد</string>
+    <string name="pending_review_label">قيد المراجعة</string>
+    <string name="offline_ready">متاح بدون اتصال</string>
+</resources>

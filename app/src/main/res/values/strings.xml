@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Wafa Deen</string>
+    <string name="app_tagline">বিশ্বস্ত অফলাইন ইসলামী শিক্ষা ও দ্বীনী সঙ্গী</string>
+    <string name="developer_attribution">Wafa Zone by Mehedi364</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">হোম</string>
+    <string name="nav_salah">নামাজ শিক্ষা</string>
+    <string name="nav_quran">আল-কুরআন</string>
+    <string name="nav_hadith">সহিহ হাদিস</string>
+    <string name="nav_duas">দোয়া ও জিকির</string>
+    <string name="nav_tasbih">তাসবীহ</string>
+    <string name="nav_ramadan">রমজান ও ক্যালেন্ডার</string>
+    <string name="nav_qibla">কিবলা ও সময়</string>
+    <string name="nav_bookmarks">সংরক্ষিত</string>
+    <string name="nav_settings">সেটিংস</string>
+
+    <!-- General -->
+    <string name="search_hint">অনুসন্ধান করুন…</string>
+    <string name="back">ফিরে যান</string>
+    <string name="close">বন্ধ করুন</string>
+    <string name="save">সংরক্ষণ</string>
+    <string name="saved">সংরক্ষিত হয়েছে</string>
+    <string name="remove">মুছে ফেলুন</string>
+    <string name="share">শেয়ার করুন</string>
+    <string name="copied">ক্লিপবোর্ডে কপি করা হয়েছে</string>
+    <string name="reset">পুনরায় সেট</string>
+    <string name="cancel">বাতিল</string>
+    <string name="confirm">নিশ্চিত করুন</string>
+    <string name="verified_label">যাচাইকৃত (Verified)</string>
+    <string name="pending_review_label">পর্যালোচনাধীন (Pending Review)</string>
+    <string name="offline_ready">অফলাইনে ব্যবহারযোগ্য</string>
+</resources>

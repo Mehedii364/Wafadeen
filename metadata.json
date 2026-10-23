@@ -1,0 +1,6 @@
+{
+  "name": "Wafa Deen",
+  "description": "Wafa Deen — Premium offline-first Islamic learning app featuring Salah education, Quran recitation, Sahih Hadith library, Duas, Digital Tasbih, Ramadan & prayer times, and Qibla compass.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

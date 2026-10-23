@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Wafa Deen</string>
+    <string name="app_tagline">Trusted Offline Islamic Learning &amp; Companion</string>
+    <string name="developer_attribution">Wafa Zone by Mehedi364</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_salah">Learn Salah</string>
+    <string name="nav_quran">Al-Quran</string>
+    <string name="nav_hadith">Sahih Hadith</string>
+    <string name="nav_duas">Duas &amp; Adhkar</string>
+    <string name="nav_tasbih">Tasbih</string>
+    <string name="nav_ramadan">Ramadan &amp; Calendar</string>
+    <string name="nav_qibla">Qibla &amp; Times</string>
+    <string name="nav_bookmarks">Bookmarks</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- General -->
+    <string name="search_hint">Search…</string>
+    <string name="back">Back</string>
+    <string name="close">Close</string>
+    <string name="save">Save</string>
+    <string name="saved">Saved</string>
+    <string name="remove">Remove</string>
+    <string name="share">Share</string>
+    <string name="copied">Copied to clipboard</string>
+    <string name="reset">Reset</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="verified_label">Verified</string>
+    <string name="pending_review_label">Pending Review</string>
+    <string name="offline_ready">Offline Available</string>
+</resources>
