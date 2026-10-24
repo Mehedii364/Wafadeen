@@ -353,6 +353,9 @@ fun WafaDeenApp(
                                 scope.launch {
                                     preferencesManager.setAsrMethod(if (isHanafiSelected) "Hanafi" else "Standard")
                                 }
+                            },
+                            onPlayAudio = { url, trackTitle ->
+                                audioPlayerManager.play(url, trackTitle)
                             }
                         )
                     }

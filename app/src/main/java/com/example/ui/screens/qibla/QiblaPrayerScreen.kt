@@ -1,6 +1,7 @@
 package com.example.ui.screens.qibla
 
 import android.Manifest
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -37,9 +38,11 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Mosque
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material.icons.filled.NearMe
+import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.Vibration
+import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -89,8 +92,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.data.model.CalculationMethod
 import com.example.data.model.CityLocation
 import com.example.data.model.PrayerTimes
+import com.example.data.model.PrayerType
+import com.example.service.PrayerNotificationManager
+import com.example.service.SalahAudioRegistry
 import com.example.ui.theme.DeepEmerald
 import com.example.ui.theme.EmeraldPrimary
 import com.example.ui.theme.RestrainedGold
@@ -111,6 +118,7 @@ fun QiblaPrayerScreen(
     onCitySelected: (CityLocation) -> Unit,
     isHanafiAsr: Boolean,
     onToggleAsrMethod: (Boolean) -> Unit,
+    onPlayAudio: (url: String, trackTitle: String) -> Unit = { _, _ -> },
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -126,6 +134,7 @@ fun QiblaPrayerScreen(
     var isRefreshingLocation by remember { mutableStateOf(false) }
     var useLiveGps by remember { mutableStateOf(false) }
     var selectedTab by remember { mutableIntStateOf(0) }
+    var selectedCalculationMethod by remember { mutableStateOf(CalculationMethod.KARACHI_IFB) }
     val tabs = listOf("কিবলা কম্পাস (লাইভ)", "নামাজের সময়সূচি")
 
     val cities = PrayerTimeCalculator.CITIES
@@ -197,7 +206,7 @@ fun QiblaPrayerScreen(
     }
 
     // Exact Prayer times calculated dynamically
-    val dynamicPrayerTimes = remember(effectiveLatitude, effectiveLongitude, effectiveTzOffset, isHanafiAsr, useLiveGps) {
+    val dynamicPrayerTimes = remember(effectiveLatitude, effectiveLongitude, effectiveTzOffset, isHanafiAsr, useLiveGps, selectedCalculationMethod) {
         if (useLiveGps && liveLocationState.isLiveGps) {
             PrayerTimeCalculator.calculatePrayerTimesForCoordinates(
                 calendar = Calendar.getInstance(),
@@ -205,13 +214,15 @@ fun QiblaPrayerScreen(
                 longitude = effectiveLongitude,
                 timeZoneOffsetHours = effectiveTzOffset,
                 isHanafiAsr = isHanafiAsr,
+                calculationMethod = selectedCalculationMethod,
                 locationNameBn = liveLocationState.locationNameBn,
                 locationNameEn = liveLocationState.locationNameEn
             )
         } else {
             PrayerTimeCalculator.calculatePrayerTimes(
                 location = activeCity,
-                isHanafiAsr = isHanafiAsr
+                isHanafiAsr = isHanafiAsr,
+                calculationMethod = selectedCalculationMethod
             )
         }
     }
@@ -341,7 +352,10 @@ fun QiblaPrayerScreen(
                 isLiveGps = useLiveGps && liveLocationState.isLiveGps,
                 locationDisplayName = if (useLiveGps && liveLocationState.isLiveGps) liveLocationState.locationNameBn else "${activeCity.nameBn} (${activeCity.country})",
                 isHanafiAsr = isHanafiAsr,
-                onToggleAsrMethod = onToggleAsrMethod
+                onToggleAsrMethod = onToggleAsrMethod,
+                selectedMethod = selectedCalculationMethod,
+                onSelectMethod = { selectedCalculationMethod = it },
+                onPlayAudio = onPlayAudio
             )
         }
     }
@@ -1065,13 +1079,39 @@ fun PrayerScheduleTab(
     isLiveGps: Boolean,
     locationDisplayName: String,
     isHanafiAsr: Boolean,
-    onToggleAsrMethod: (Boolean) -> Unit
+    onToggleAsrMethod: (Boolean) -> Unit,
+    selectedMethod: CalculationMethod,
+    onSelectMethod: (CalculationMethod) -> Unit,
+    onPlayAudio: (url: String, trackTitle: String) -> Unit
 ) {
+    val context = LocalContext.current
+    val (nextPrayerType, remainingMinutes) = remember(prayerTimes) {
+        PrayerTimeCalculator.getNextPrayerAndRemainingMinutes(prayerTimes)
+    }
+
+    val remainingHours = remainingMinutes / 60
+    val remainingMins = remainingMinutes % 60
+    val countdownText = if (remainingHours > 0) {
+        "${PrayerTimeCalculator.toBengaliDigits(remainingHours)} ঘণ্টা ${PrayerTimeCalculator.toBengaliDigits(remainingMins)} মিনিট বাকি"
+    } else {
+        "${PrayerTimeCalculator.toBengaliDigits(remainingMins)} মিনিট বাকি"
+    }
+
+    val nextPrayerNameBn = when (nextPrayerType) {
+        PrayerType.FAJR -> "ফজর (Fajr)"
+        PrayerType.SUNRISE -> "সূর্যোদয় (Sunrise)"
+        PrayerType.DHUHR -> "জোহর (Dhuhr)"
+        PrayerType.ASR -> "আসর (Asr)"
+        PrayerType.MAGHRIB -> "মাগরিব (Maghrib)"
+        PrayerType.ISHA -> "এশা (Isha)"
+    }
+
     LazyColumn(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier.fillMaxSize().testTag("prayer_schedule_tab")
     ) {
+        // Location & Date Header Card
         item {
             Card(
                 shape = RoundedCornerShape(16.dp),
@@ -1112,13 +1152,112 @@ fun PrayerScheduleTab(
                     )
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
-                        text = if (isLiveGps)
-                            "পদ্ধতি: ডিভাইসের লাইভ জিপিএস স্থানাঙ্ক ও স্থানীয় সময় অঞ্চল ভিত্তি"
-                        else
-                            "পদ্ধতি: ${prayerTimes.calculationMethod}",
+                        text = "পদ্ধতি: ${selectedMethod.nameBn}",
                         style = MaterialTheme.typography.labelSmall,
-                        color = Color.White.copy(alpha = 0.8f)
+                        color = Color.White.copy(alpha = 0.85f)
                     )
+                }
+            }
+        }
+
+        // Live Next Prayer Countdown Card
+        item {
+            Card(
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                ),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Default.Mosque,
+                                contentDescription = null,
+                                tint = DeepEmerald,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = "পরবর্তী সালাত: $nextPrayerNameBn",
+                                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                                color = DeepEmerald
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = countdownText,
+                            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold),
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+
+                    // Schedule Alarms Action Button
+                    IconButton(
+                        onClick = {
+                            val notifManager = PrayerNotificationManager(context)
+                            notifManager.scheduleAllDailyPrayers(prayerTimes, locationDisplayName)
+                            Toast.makeText(
+                                context,
+                                "সকল ওয়াক্তের আজান ও অ্যালার্ম সফলভাবে শিডিউল করা হয়েছে।",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        },
+                        modifier = Modifier
+                            .size(46.dp)
+                            .clip(CircleShape)
+                            .background(DeepEmerald)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.NotificationsActive,
+                            contentDescription = "সকল আজান অ্যালার্ম শিডিউল করুন",
+                            tint = RestrainedGold,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                }
+            }
+        }
+
+        // Calculation Method Selector
+        item {
+            Card(
+                shape = RoundedCornerShape(14.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(14.dp)) {
+                    Text(
+                        text = "গণনা পদ্ধতি (Calculation Convention)",
+                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        items(CalculationMethod.values()) { method ->
+                            FilterChip(
+                                selected = selectedMethod == method,
+                                onClick = { onSelectMethod(method) },
+                                label = {
+                                    Text(
+                                        text = method.nameEn,
+                                        style = MaterialTheme.typography.labelSmall
+                                    )
+                                },
+                                colors = FilterChipDefaults.filterChipColors(
+                                    selectedContainerColor = MaterialTheme.colorScheme.primary,
+                                    selectedLabelColor = MaterialTheme.colorScheme.onPrimary
+                                )
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -1162,24 +1301,67 @@ fun PrayerScheduleTab(
             }
         }
 
-        // Daily Prayers Table
+        // Daily Prayers Table with Distinct Audio Preview Playback
         item {
-            PrayerTimeRow("ফজর (Fajr)", "সুবহে সাদিক থেকে সূর্যোদয়ের পূর্বে", prayerTimes.fajr, Icons.Default.Mosque)
+            val mapping = SalahAudioRegistry.getAudioMappingForPrayer(PrayerType.FAJR)
+            PrayerTimeRow(
+                title = "ফজর (Fajr)",
+                subtitle = "সুবহে সাদিক হতে সূর্যোদয়ের পূর্বে • আজানে 'আস-সালাতু খাইরুম মিনান নাওম' পাঠ",
+                time = prayerTimes.fajr,
+                icon = Icons.Default.Mosque,
+                onPlayAdhan = { onPlayAudio(mapping.audioUrl, "${mapping.nameBn} - ${mapping.adhanStyleBn}") }
+            )
         }
         item {
-            PrayerTimeRow("সূর্যোদয় (Sunrise)", "ইশরাকের ওয়াক্ত শুরু", prayerTimes.sunrise, Icons.Default.LocationOn, isSun = true)
+            val mapping = SalahAudioRegistry.getAudioMappingForPrayer(PrayerType.SUNRISE)
+            PrayerTimeRow(
+                title = "সূর্যোদয় (Sunrise)",
+                subtitle = "ইশরাকের ওয়াক্ত শুরু • তেলাওয়াত শুনুন",
+                time = prayerTimes.sunrise,
+                icon = Icons.Default.LocationOn,
+                isSun = true,
+                onPlayAdhan = { onPlayAudio(mapping.audioUrl, "${mapping.nameBn} - ${mapping.adhanStyleBn}") }
+            )
         }
         item {
-            PrayerTimeRow("জোহর (Dhuhr)", "সূর্য মধ্যাহ্ন ঢলে পড়ার পর থেকে", prayerTimes.dhuhr, Icons.Default.Mosque)
+            val mapping = SalahAudioRegistry.getAudioMappingForPrayer(PrayerType.DHUHR)
+            PrayerTimeRow(
+                title = "জোহর (Dhuhr)",
+                subtitle = "সূর্য মধ্যাহ্ন ঢলে পড়ার পর থেকে • মক্কা হারাম আজান",
+                time = prayerTimes.dhuhr,
+                icon = Icons.Default.Mosque,
+                onPlayAdhan = { onPlayAudio(mapping.audioUrl, "${mapping.nameBn} - ${mapping.adhanStyleBn}") }
+            )
         }
         item {
-            PrayerTimeRow("আসর (Asr)", prayerTimes.asrJuristicMethod, prayerTimes.asr, Icons.Default.Mosque)
+            val mapping = SalahAudioRegistry.getAudioMappingForPrayer(PrayerType.ASR)
+            PrayerTimeRow(
+                title = "আসর (Asr)",
+                subtitle = "${prayerTimes.asrJuristicMethod} • মসজিদে নববীর আজান",
+                time = prayerTimes.asr,
+                icon = Icons.Default.Mosque,
+                onPlayAdhan = { onPlayAudio(mapping.audioUrl, "${mapping.nameBn} - ${mapping.adhanStyleBn}") }
+            )
         }
         item {
-            PrayerTimeRow("মাগরিব (Maghrib)", "সূর্যাস্ত ও ইফতারের সঠিক সময়", prayerTimes.maghrib, Icons.Default.Mosque)
+            val mapping = SalahAudioRegistry.getAudioMappingForPrayer(PrayerType.MAGHRIB)
+            PrayerTimeRow(
+                title = "মাগরিব (Maghrib)",
+                subtitle = "সূর্যাস্ত ও ইফতারের সঠিক সময় • আল-আকসা আজান",
+                time = prayerTimes.maghrib,
+                icon = Icons.Default.Mosque,
+                onPlayAdhan = { onPlayAudio(mapping.audioUrl, "${mapping.nameBn} - ${mapping.adhanStyleBn}") }
+            )
         }
         item {
-            PrayerTimeRow("এশা (Isha)", "রাতের সালাত ও বিতর ওয়াজিব", prayerTimes.isha, Icons.Default.Mosque)
+            val mapping = SalahAudioRegistry.getAudioMappingForPrayer(PrayerType.ISHA)
+            PrayerTimeRow(
+                title = "এশা (Isha)",
+                subtitle = "রাতের সালাত ও বিতর ওয়াজিব • শাইখ আল-আফাসী আজান",
+                time = prayerTimes.isha,
+                icon = Icons.Default.Mosque,
+                onPlayAdhan = { onPlayAudio(mapping.audioUrl, "${mapping.nameBn} - ${mapping.adhanStyleBn}") }
+            )
         }
     }
 }
@@ -1190,7 +1372,8 @@ fun PrayerTimeRow(
     subtitle: String,
     time: String,
     icon: androidx.compose.ui.graphics.vector.ImageVector,
-    isSun: Boolean = false
+    isSun: Boolean = false,
+    onPlayAdhan: (() -> Unit)? = null
 ) {
     Card(
         shape = RoundedCornerShape(12.dp),
@@ -1204,7 +1387,10 @@ fun PrayerTimeRow(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.weight(1f)
+            ) {
                 Box(
                     modifier = Modifier
                         .size(36.dp)
@@ -1220,7 +1406,7 @@ fun PrayerTimeRow(
                     )
                 }
                 Spacer(modifier = Modifier.width(12.dp))
-                Column {
+                Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = title,
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
@@ -1234,11 +1420,28 @@ fun PrayerTimeRow(
                 }
             }
 
-            Text(
-                text = time,
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                color = if (isSun) RestrainedGold else MaterialTheme.colorScheme.primary
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = time,
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    color = if (isSun) RestrainedGold else MaterialTheme.colorScheme.primary
+                )
+
+                if (onPlayAdhan != null) {
+                    Spacer(modifier = Modifier.width(6.dp))
+                    IconButton(
+                        onClick = onPlayAdhan,
+                        modifier = Modifier.size(36.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.VolumeUp,
+                            contentDescription = "আজান শুনুন",
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                }
+            }
         }
     }
 }

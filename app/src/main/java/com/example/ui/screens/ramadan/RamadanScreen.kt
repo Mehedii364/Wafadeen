@@ -61,6 +61,7 @@ import com.example.data.model.NisabType
 import com.example.data.model.PrayerTimes
 import com.example.data.model.ZakatInput
 import com.example.data.model.ZakatResult
+import com.example.util.ZakatCalculator
 import com.example.ui.components.ArabicTextDisplay
 import com.example.ui.components.SectionHeader
 import com.example.ui.theme.DeepEmerald
@@ -261,9 +262,6 @@ fun ZakatCalculatorTab() {
     val goldPrice = goldGramPrice.toDoubleOrNull() ?: 11500.0
     val silverPrice = silverGramPrice.toDoubleOrNull() ?: 120.0
 
-    // Nisab thresholds: Silver 595 grams, Gold 85 grams
-    val nisabThreshold = if (selectedNisab == NisabType.SILVER) (595.0 * silverPrice) else (85.0 * goldPrice)
-
     val cash = cashInput.toDoubleOrNull() ?: 0.0
     val goldVal = goldValueInput.toDoubleOrNull() ?: 0.0
     val silverVal = silverValueInput.toDoubleOrNull() ?: 0.0
@@ -271,10 +269,21 @@ fun ZakatCalculatorTab() {
     val receivables = receivablesInput.toDoubleOrNull() ?: 0.0
     val debts = debtsInput.toDoubleOrNull() ?: 0.0
 
-    val grossAssets = cash + goldVal + silverVal + merchandise + receivables
-    val netWealth = (grossAssets - debts).coerceAtLeast(0.0)
-    val isZakatObligatory = netWealth >= nisabThreshold
-    val zakatPayable = if (isZakatObligatory) (netWealth * 0.025) else 0.0
+    val zakatCalcResult = ZakatCalculator.calculate(
+        cash = cash,
+        goldVal = goldVal,
+        silverVal = silverVal,
+        merchandise = merchandise,
+        receivables = receivables,
+        debts = debts,
+        goldGramPrice = goldPrice,
+        silverGramPrice = silverPrice,
+        nisabType = selectedNisab
+    )
+    val nisabThreshold = zakatCalcResult.nisabThreshold
+    val netWealth = zakatCalcResult.netWealth
+    val isZakatObligatory = zakatCalcResult.isZakatObligatory
+    val zakatPayable = zakatCalcResult.zakatPayable
 
     LazyColumn(
         contentPadding = PaddingValues(16.dp),

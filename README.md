@@ -1,6 +1,6 @@
 # Wafa Deen — Production Android Islamic Learning Application
 
-[![Android Build](https://github.com/wafazone/wafadeen/actions/workflows/android-build.yml/badge.svg)](https://github.com/wafazone/wafadeen/actions/workflows/android-build.yml)
+[![Android Build](https://github.com/Mehedii364/Wafadeen/actions/workflows/android-build.yml/badge.svg)](https://github.com/Mehedii364/Wafadeen/actions/workflows/android-build.yml)
 
 **Wafa Deen** (وفاء دين) is a production-ready, offline-first native Android Islamic learning and lifestyle companion application. It is built strictly with modern Android technologies—Kotlin, Jetpack Compose, Material 3, Room Database, and DataStore.
 

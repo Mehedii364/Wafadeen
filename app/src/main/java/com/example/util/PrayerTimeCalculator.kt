@@ -1,7 +1,12 @@
 package com.example.util
 
+import com.example.data.model.CalculationMethod
 import com.example.data.model.CityLocation
+import com.example.data.model.HighLatitudeRule
+import com.example.data.model.PrayerItem
 import com.example.data.model.PrayerTimes
+import com.example.data.model.PrayerType
+import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import kotlin.math.abs
@@ -89,7 +94,7 @@ object PrayerTimeCalculator {
     }
 
     /**
-     * Computes solar prayer times for exact latitude and longitude
+     * Computes solar prayer times for exact live coordinates with customizable method and madhhab
      */
     fun calculatePrayerTimesForCoordinates(
         calendar: Calendar = Calendar.getInstance(),
@@ -97,6 +102,8 @@ object PrayerTimeCalculator {
         longitude: Double,
         timeZoneOffsetHours: Double,
         isHanafiAsr: Boolean = true,
+        calculationMethod: CalculationMethod = CalculationMethod.KARACHI_IFB,
+        highLatitudeRule: HighLatitudeRule = HighLatitudeRule.ANGLE_BASED,
         locationNameBn: String = "বর্তমান লাইভ অবস্থান",
         locationNameEn: String = "Live GPS Location"
     ): PrayerTimes {
@@ -111,23 +118,25 @@ object PrayerTimeCalculator {
         return calculatePrayerTimes(
             calendar = calendar,
             location = customLocation,
-            isHanafiAsr = isHanafiAsr
+            isHanafiAsr = isHanafiAsr,
+            calculationMethod = calculationMethod,
+            highLatitudeRule = highLatitudeRule
         )
     }
 
     /**
-     * Computes solar prayer times using Islamic Foundation Bangladesh / Karachi convention
-     * Fajr: 18 degrees, Isha: 18 degrees, Maghrib: sunset + 1-2 min safety
-     * Asr: Hanafi (shadow ratio 2) or Shafi'i (shadow ratio 1)
+     * Computes solar prayer times using recognized astronomical equations with high-latitude safety
      */
     fun calculatePrayerTimes(
         calendar: Calendar = Calendar.getInstance(),
         location: CityLocation,
-        isHanafiAsr: Boolean = true
+        isHanafiAsr: Boolean = true,
+        calculationMethod: CalculationMethod = CalculationMethod.KARACHI_IFB,
+        highLatitudeRule: HighLatitudeRule = HighLatitudeRule.ANGLE_BASED
     ): PrayerTimes {
         val dayOfYear = calendar.get(Calendar.DAY_OF_YEAR)
 
-        // Approximate solar declination and equation of time
+        // Solar declination & equation of time (Astronomical approximations)
         val b = 2.0 * Math.PI * (dayOfYear - 81) / 365.0
         val eot = 9.87 * sin(2.0 * b) - 7.53 * cos(b) - 1.5 * sin(b) // in minutes
         val declination = Math.toRadians(23.45 * sin(b))
@@ -138,30 +147,59 @@ object PrayerTimeCalculator {
         val noonUtc = 12.0 - (location.longitude / 15.0) - (eot / 60.0)
         val dhuhrLocal = noonUtc + location.timeZoneOffsetHours
 
-        // Sunrise & Sunset angle (sun center at -0.833 degrees for refraction & diameter)
+        // Sunrise & Sunset angle (sun center at 90.833 degrees for atmospheric refraction & semidiameter)
         val zenithSunrise = Math.toRadians(90.833)
-        val haSunrise = acosHourAngle(zenithSunrise, latRad, declination)
+        val haSunrise = acosHourAngleOrNull(zenithSunrise, latRad, declination) ?: 90.0
         val sunriseLocal = dhuhrLocal - (haSunrise / 15.0)
         val sunsetLocal = dhuhrLocal + (haSunrise / 15.0)
 
-        // Fajr (18 degrees below horizon => zenith 108 deg)
-        val zenithFajr = Math.toRadians(108.0)
-        val haFajr = acosHourAngle(zenithFajr, latRad, declination)
-        val fajrLocal = dhuhrLocal - (haFajr / 15.0)
+        // Night length in hours
+        val dayLength = (sunsetLocal - sunriseLocal)
+        val nightLength = (24.0 - dayLength).coerceIn(4.0, 20.0)
 
-        // Isha (18 degrees below horizon => zenith 108 deg)
-        val zenithIsha = Math.toRadians(108.0)
-        val haIsha = acosHourAngle(zenithIsha, latRad, declination)
-        val ishaLocal = dhuhrLocal + (haIsha / 15.0)
+        // Fajr angle calculation
+        val zenithFajr = Math.toRadians(90.0 + calculationMethod.fajrAngle)
+        val haFajrExact = acosHourAngleOrNull(zenithFajr, latRad, declination)
 
-        // Asr: Shadow length factor
+        val fajrLocal = if (haFajrExact != null && abs(location.latitude) < 55.0) {
+            dhuhrLocal - (haFajrExact / 15.0)
+        } else {
+            // Apply high-latitude rule
+            val portion = when (highLatitudeRule) {
+                HighLatitudeRule.ANGLE_BASED -> (calculationMethod.fajrAngle / 60.0) * nightLength
+                HighLatitudeRule.ONE_SEVENTH -> nightLength / 7.0
+                HighLatitudeRule.MIDDLE_OF_NIGHT -> nightLength / 2.0
+            }
+            sunriseLocal - portion
+        }
+
+        // Isha calculation
+        val ishaLocal = if (calculationMethod.isFixedIshaMinutes) {
+            sunsetLocal + (calculationMethod.ishaMinutesAfterMaghrib.toDouble() / 60.0)
+        } else {
+            val zenithIsha = Math.toRadians(90.0 + calculationMethod.ishaAngle)
+            val haIshaExact = acosHourAngleOrNull(zenithIsha, latRad, declination)
+            if (haIshaExact != null && abs(location.latitude) < 55.0) {
+                dhuhrLocal + (haIshaExact / 15.0)
+            } else {
+                val portion = when (highLatitudeRule) {
+                    HighLatitudeRule.ANGLE_BASED -> (calculationMethod.ishaAngle / 60.0) * nightLength
+                    HighLatitudeRule.ONE_SEVENTH -> nightLength / 7.0
+                    HighLatitudeRule.MIDDLE_OF_NIGHT -> nightLength / 2.0
+                }
+                sunsetLocal + portion
+            }
+        }
+
+        // Asr: Shadow length factor (Hanafi = 2x shadow, Shafi'i/standard = 1x shadow)
         val shadowFactor = if (isHanafiAsr) 2.0 else 1.0
         val angleAsr = atan(1.0 / (shadowFactor + tan(abs(latRad - declination))))
         val zenithAsr = (Math.PI / 2.0) - angleAsr
-        val haAsr = acosHourAngle(zenithAsr, latRad, declination)
+        val haAsr = acosHourAngleOrNull(zenithAsr, latRad, declination) ?: 60.0
         val asrLocal = dhuhrLocal + (haAsr / 15.0)
 
-        val maghribLocal = sunsetLocal + (2.0 / 60.0) // 2 minutes safety margin
+        // Maghrib: sunset + 2 minutes safety margin
+        val maghribLocal = sunsetLocal + (2.0 / 60.0)
 
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH) + 1
@@ -179,18 +217,24 @@ object PrayerTimeCalculator {
             isha = formatHoursToTime(ishaLocal),
             dateFormatted = dateFormatted,
             hijriDate = hijriEstimate,
-            calculationMethod = "ইসলামিক ফাউন্ডেশন বাংলাদেশ / করাচি ১৮° পদ্ধতি",
+            calculationMethod = calculationMethod.nameBn,
             asrJuristicMethod = if (isHanafiAsr) "হানাফি (দ্বিগুণ ছায়া)" else "শাফেঈ / জমহুর (একগুণ ছায়া)"
         )
     }
 
-    private fun acosHourAngle(zenithRad: Double, latRad: Double, decRad: Double): Double {
-        val cosH = (cos(zenithRad) - sin(latRad) * sin(decRad)) / (cos(latRad) * cos(decRad))
-        val clamped = cosH.coerceIn(-1.0, 1.0)
-        return Math.toDegrees(acos(clamped))
+    private fun acosHourAngleOrNull(zenithRad: Double, latRad: Double, decRad: Double): Double? {
+        val cosLat = cos(latRad)
+        val cosDec = cos(decRad)
+        if (cosLat * cosDec == 0.0) return null
+
+        val cosH = (cos(zenithRad) - sin(latRad) * sin(decRad)) / (cosLat * cosDec)
+        if (cosH < -1.0 || cosH > 1.0) {
+            return null // Twilight angle not reachable at this latitude/season
+        }
+        return Math.toDegrees(acos(cosH))
     }
 
-    private fun formatHoursToTime(hoursFraction: Double): String {
+    fun formatHoursToTime(hoursFraction: Double): String {
         var h = hoursFraction
         while (h < 0) h += 24.0
         while (h >= 24.0) h -= 24.0
@@ -208,6 +252,48 @@ object PrayerTimeCalculator {
         }
         val amPm = if (isPm) "PM" else "AM"
         return String.format(Locale.US, "%02d:%02d %s", display12Hour, finalMinutes, amPm)
+    }
+
+    /**
+     * Determines which prayer is next along with remaining time in minutes
+     */
+    fun getNextPrayerAndRemainingMinutes(
+        prayerTimes: PrayerTimes,
+        currentCalendar: Calendar = Calendar.getInstance()
+    ): Pair<PrayerType, Int> {
+        val format = SimpleDateFormat("hh:mm a", Locale.US)
+        val currentMinutes = currentCalendar.get(Calendar.HOUR_OF_DAY) * 60 + currentCalendar.get(Calendar.MINUTE)
+
+        val prayers = listOf(
+            PrayerType.FAJR to prayerTimes.fajr,
+            PrayerType.SUNRISE to prayerTimes.sunrise,
+            PrayerType.DHUHR to prayerTimes.dhuhr,
+            PrayerType.ASR to prayerTimes.asr,
+            PrayerType.MAGHRIB to prayerTimes.maghrib,
+            PrayerType.ISHA to prayerTimes.isha
+        )
+
+        for ((type, timeStr) in prayers) {
+            val date = try { format.parse(timeStr) } catch (e: Exception) { null }
+            if (date != null) {
+                val cal = Calendar.getInstance().apply { time = date }
+                val prayerMinutes = cal.get(Calendar.HOUR_OF_DAY) * 60 + cal.get(Calendar.MINUTE)
+                if (prayerMinutes > currentMinutes) {
+                    return Pair(type, prayerMinutes - currentMinutes)
+                }
+            }
+        }
+
+        // If all prayers today have passed, Fajr of tomorrow is next
+        val fajrDate = try { format.parse(prayerTimes.fajr) } catch (e: Exception) { null }
+        val fajrMinutes = if (fajrDate != null) {
+            val cal = Calendar.getInstance().apply { time = fajrDate }
+            cal.get(Calendar.HOUR_OF_DAY) * 60 + cal.get(Calendar.MINUTE)
+        } else {
+            5 * 60
+        }
+        val remainingToTomorrowFajr = (24 * 60 - currentMinutes) + fajrMinutes
+        return Pair(PrayerType.FAJR, remainingToTomorrowFajr)
     }
 
     /**

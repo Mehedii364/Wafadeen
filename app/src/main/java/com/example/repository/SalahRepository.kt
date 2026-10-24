@@ -91,7 +91,8 @@ object SalahRepository {
             isObligatory = true,
             hanafiNote = "মাথার চারভাগের একভাগ মাসেহ করা ফরজ। গর্দান মাসেহ করা মুস্তাহাব।",
             otherMadhhabsNote = "শাফেঈ মাযহাবে মাথার সামান্য অংশ ভিজালেই আদায় হয়, মালেকি ও হাম্বলি মাযহাবে পুরো মাথা মাসেহ করা ওয়াজিব।",
-            reference = "সূরা মায়িদা: ৬; সহিহ মুসলিম: ২৩৪; তিরমিজি: ৫৫"
+            reference = "সূরা মায়িদা: ৬; সহিহ মুসলিম: ২৩৪; তিরমিজি: ৫৫",
+            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/005006.mp3"
         ),
 
         // Purification: Ghusl
@@ -108,7 +109,8 @@ object SalahRepository {
             explanationBn = "গোসলের ৩টি ফরজ:\n১. গড়গড়ার সাথে ভালোভাবে কুলি করা (রোজাদার হলে সতর্কতার সাথে)।\n২. নাকের নরম হাড় পর্যন্ত পানি পৌঁছে নাক পরিষ্কার করা।\n৩. শরীরের প্রতিটি অঙ্গের চুলের গোড়ায় পানি পৌঁছানো যাতে একবিন্দু জায়গাও শুকনো না থাকে।\n\nগোসলের সুন্নাত পদ্ধতি:\nপ্রথমে উভয় হাত কব্জি পর্যন্ত ধোয়া, লজ্জাস্থান পরিষ্কার করা, সাধারণ অজুর মতো অজু করা (পা ধোয়া ছাড়া বা শেষে ধোয়া), এরপর পুরো মাথায় ৩ বার পানি ঢালা এবং সারা শরীর ভালোভাবে ধৌত করা।",
             explanationEn = "The 3 fard steps of Ghusl: 1. Thoroughly rinsing the mouth with gargling. 2. Sniffing water into the nose up to the soft bone. 3. Pouring water over the entire body so no spot remains dry.",
             isObligatory = true,
-            reference = "সহিহ বুখারী: ২৪৮; সহিহ মুসলিম: ৩১৬"
+            reference = "সহিহ বুখারী: ২৪৮; সহিহ মুসলিম: ৩১৬",
+            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/004043.mp3"
         ),
 
         // Step 1: Standing on Prayer Mat (Qiyam & Niyyah)
@@ -150,7 +152,7 @@ object SalahRepository {
             hanafiNote = "পুরুষরা কানের লতি পর্যন্ত হাত উঠিয়ে নাভির নিচে বাঁধবেন; মহিলারা কাঁধ পর্যন্ত উঠিয়ে বুকের ওপর রাখবেন।",
             otherMadhhabsNote = "শাফেঈ ও হাম্বলি মাযহাবে বুকের ওপর বা নাভির ওপরে হাত বাঁধা হয় এবং হাত কাঁধ বরাবর উঠানো হয়।",
             reference = "সহিহ বুখারী: ৭৩৭; সহিহ মুসলিম: ৩৯০",
-            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/001001.mp3",
+            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/017111.mp3",
             imageResId = R.drawable.img_salah_qiyam,
             postureName = "তাকবীরে তাহরীমা ও কিরাতের জন্য হাত বাঁধা"
         ),
@@ -171,7 +173,7 @@ object SalahRepository {
             isObligatory = false,
             hanafiNote = "হানাফি ও হাম্বলি মাযহাবে এই দু'আটি ছানা হিসেবে সুন্নাত।",
             reference = "সুনানে তিরমিজি: ২৪৩; সুনানে আবু দাউদ: ৭৭৫ (হাসান হাদিস)",
-            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/001001.mp3",
+            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/059023.mp3",
             imageResId = R.drawable.img_salah_qiyam,
             postureName = "কিয়াম অবস্থায় ছানা পাঠ"
         ),
@@ -191,7 +193,7 @@ object SalahRepository {
             explanationEn = "Seeking refuge from Satan and invoking Allah's name before reciting the Quran in prayer.",
             isObligatory = false,
             reference = "সূরা আন-নাহল: ৯৮; সহিহ মুসলিম: ৩৯৯",
-            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/001001.mp3",
+            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/016098.mp3",
             imageResId = R.drawable.img_salah_qiyam,
             postureName = "কিয়াম অবস্থায় আশ্রয় প্রার্থনা ও বিসমিল্লাহ"
         ),
@@ -213,7 +215,7 @@ object SalahRepository {
             hanafiNote = "হানাফি মাযহাবে জামাতে ইমামের পেছনে মুক্তাদির সূরা ফাতিহা পাঠ করতে হয় না (ইমামের কিরাতই মুক্তাদির কিরাত)। আমীন মনে মনে আস্তে বলা হয়।",
             otherMadhhabsNote = "শাফেঈ মাযহাবে মুক্তাদির জন্যও সূরা ফাতিহা ফরজ এবং জেহরি নামাজে উচ্চৈঃস্বরে আমীন বলা হয়।",
             reference = "সহিহ বুখারী: ৭৫৬; সহিহ মুসলিম: ৩৯৪",
-            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/001001.mp3",
+            audioUrl = "https://server8.mp3quran.net/afs/001.mp3",
             imageResId = R.drawable.img_salah_qiyam,
             postureName = "কিয়াম অবস্থায় পবিত্র কোরআন তেলাওয়াত"
         ),
@@ -234,7 +236,7 @@ object SalahRepository {
             isObligatory = true,
             hanafiNote = "পুরুষরা দুই হাতের আঙুল ছড়িয়ে হাঁটু আঁকড়ে ধরবে এবং কনুই সোজা রাখবে। মহিলারা শুধু হাত হাঁটুর ওপর রাখবে এবং সামান্য অবনত হবে।",
             reference = "সহিহ মুসলিম: ৭৭২; সুনানে আবু দাউদ: ৮৬৯",
-            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/001001.mp3",
+            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/056074.mp3",
             imageResId = R.drawable.img_salah_ruku,
             postureName = "রুকূ / বিনম্র চিত্তে অবনত হওয়া"
         ),
@@ -255,7 +257,7 @@ object SalahRepository {
             isObligatory = true,
             hanafiNote = "একাকী নামাজি তাসমি' ও তাহমিদ উভয়টি বলবে; জামাতে ইমাম 'সামি'আল্লাহু লিমান হামিদাহ' বলবে এবং মুক্তাদি কেবল 'রাব্বানা লাকাল হামদ' বলবে। হাত ঝুলানো অবস্থায় থাকবে।",
             reference = "সহিহ বুখারী: ৭৯৫, ৭৯৯",
-            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/001001.mp3",
+            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/002186.mp3",
             imageResId = R.drawable.img_salah_qiyam,
             postureName = "কওমা / রুকু হতে সোজা হয়ে স্থির দাঁড়ানো"
         ),
@@ -275,8 +277,8 @@ object SalahRepository {
             explanationEn = "Prostrating upon 7 limbs: toes, knees, palms, and forehead with nose. Reciting Subhana Rabbiyal A'la at least 3 times.",
             isObligatory = true,
             hanafiNote = "পুরুষরা বাহু বগল থেকে এবং পেট উরু থেকে পৃথক রাখবে। মহিলারা জড়োসড়ো হয়ে অঙ্গগুলো কাছাকাছি রেখে মাটি ঘেঁষে সেজদা করবে।",
-            reference = "सहিহ বুখারী: ৮১২; সহিহ মুসলিম: ৪৯১",
-            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/001001.mp3",
+            reference = "সহিহ বুখারী: ৮১২; সহিহ মুসলিম: ৪৯১",
+            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/087001.mp3",
             imageResId = R.drawable.img_salah_sujud,
             postureName = "প্রথম সেজদাহ / মাটিতে বিনম্র আত্মসমর্পণ"
         ),
@@ -297,7 +299,7 @@ object SalahRepository {
             isObligatory = true,
             hanafiNote = "দুই সেজদার মাঝে অন্তত এক তাসবীহ পরিমাণ সময় স্থির হয়ে বসা ওয়াজিব।",
             reference = "সুনানে আবু দাউদ: ৮৫০; সুনানে তিরমিজি: ২৮৪ (সহিহ)",
-            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/001001.mp3",
+            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/023118.mp3",
             imageResId = R.drawable.img_salah_jalsah,
             postureName = "জলসা / দুই সেজদার মাঝে স্থির বৈঠক"
         ),
@@ -317,7 +319,7 @@ object SalahRepository {
             explanationEn = "Performing the second prostration just like the first to complete the rak'ah.",
             isObligatory = true,
             reference = "সহিহ বুখারী: ৮২৮; সহিহ মুসলিম: ৪৯১",
-            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/001001.mp3",
+            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/096019.mp3",
             imageResId = R.drawable.img_salah_sujud,
             postureName = "দ্বিতীয় সেজদাহ / রাকাত পূর্ণকরণ"
         ),
@@ -338,7 +340,7 @@ object SalahRepository {
             isObligatory = true,
             hanafiNote = "হানাফি মাযহাবে বাম পা বিছিয়ে তার ওপর বসা এবং ডান পা খাড়া রাখা সুন্নাত। মহিলারা উভয় পা ডান দিকে বের করে নিতম্বের ওপর বসবে (তাওয়াররুক)।",
             reference = "সহিহ বুখারী: ৮৩১; সহিহ মুসলিম: ৪০২",
-            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/001001.mp3",
+            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/048029.mp3",
             imageResId = R.drawable.img_salah_jalsah,
             postureName = "বৈঠক (কা'দা) ও তাশাহহুদ পাঠ"
         ),
@@ -358,7 +360,7 @@ object SalahRepository {
             explanationEn = "Invoking peace and blessings upon Prophet Muhammad and Prophet Ibrahim in the final sitting.",
             isObligatory = false,
             reference = "সহিহ বুখারী: ৩৩৭০; সহিহ মুসলিম: ৪০৬",
-            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/001001.mp3",
+            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/033056.mp3",
             imageResId = R.drawable.img_salah_jalsah,
             postureName = "শেষ বৈঠকে দরূদে ইব্রাহিম পাঠ"
         ),
@@ -370,7 +372,7 @@ object SalahRepository {
             titleEn = "13. Dua Masurah (Supplication before Salam)",
             titleAr = "الدعاء المأثور قبل السلام",
             category = SalahCategory.PRAYER_STEPS,
-            arabicText = "اللَّهُمَّ إِنِّي ظَلَمْتُ نَفْسِي ظُلْمًا كَثِيرًا وَلاَ يَغْفِرُ الذُّنُوبَ إِلاَّ أَنْتَ فَاغْفِرْ لِي مَغْفِرَةً مِنْ عِنْدِكَ وَارْحَمْنِي إِنَّكَ أَنْتَ الْغَفُورُ الرَّحِيمُ",
+            arabicText = "اللَّهُمَّ إِنِّي ظَلَمْتُ نَفْسِي ظُلْمًا كَثِيرًا وَلاَ يَغْفِرُ الذُّنُوبَ إِلاَّ أَنْتَ فَاغْفِرْ লِي مَغْفِرَةً مِنْ عِنْدِكَ وَارْحَمْنِي إِنَّكَ أَنْتَ الْغَفُورُ الرَّحِيمُ",
             transliterationBn = "আল্লাহুম্মা ইন্নী যালামতু নাফসী যুলমান কাসীরাঁও ওয়ালা ইয়াগফিরুয যুনূবা ইল্লা আনতা, ফাগফির লী মাগফিরাতাম মিন 'ইনদিকা ওয়ারহামনী, ইন্নাকা আনতাল গাফুরুর রাহীম।",
             meaningBn = "হে আল্লাহ! আমি নিজের ওপর অনেক জুলুম (অন্যায়) করেছি। আর আপনি ছাড়া আর কেউ গুনাহ ক্ষমা করতে পারে না। অতএব আপনি নিজ অনুগ্রহে আমাকে ক্ষমা করে দিন এবং আমার প্রতি দয়া করুন। নিশ্চয়ই আপনি পরম ক্ষমাশীল ও অসীম দয়ালু।",
             meaningEn = "O Allah, I have wronged myself greatly, and no one forgives sins except You. So grant me forgiveness from You and have mercy on me; indeed, You are the Forgiving, the Merciful.",
@@ -378,7 +380,7 @@ object SalahRepository {
             explanationEn = "Recited in the final sitting after sending blessings upon the Prophet and before concluding with Salam.",
             isObligatory = false,
             reference = "সহিহ বুখারী: ৮৩৪; সহিহ মুসলিম: ২৭০৫",
-            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/001001.mp3",
+            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/007023.mp3",
             imageResId = R.drawable.img_salah_jalsah,
             postureName = "শেষ বৈঠকে ক্ষমা প্রার্থনার দু'আ"
         ),
@@ -399,7 +401,7 @@ object SalahRepository {
             isObligatory = true,
             hanafiNote = "হানাফি মাযহাবে উভয় দিকে সালাম ফেরানো ওয়াজিব।",
             reference = "সহিহ মুসলিম: ৫৮২; সুনানে আবু দাউদ: ৯৯৬",
-            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/001001.mp3",
+            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/056091.mp3",
             imageResId = R.drawable.img_salah_salam,
             postureName = "সালাম ফিরানো / ডানে ও বামে মুখ ফেরানো"
         ),
@@ -421,7 +423,7 @@ object SalahRepository {
             hanafiNote = "হানাফি মাযহাবে রুকুর পূর্বে তাকবির বলে হাত বেঁধে দু'আ কুনুত পাঠ করা হয়।",
             otherMadhhabsNote = "শাফেঈ মাযহাবে রুকু থেকে ওঠার পর হাত তুলে কুনুত পাঠ করা হয় এবং রমজানের শেষার্ধে বিতরে ও প্রতিদিন ফজরে কুনুত পাঠ করা হয়।",
             reference = "মুসান্নাফ ইবনে আবি শায়বাহ: ৬৯৬৫; বায়হাকী: ৩/৪০",
-            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/001001.mp3",
+            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/003008.mp3",
             imageResId = R.drawable.img_salah_qiyam,
             postureName = "বিতরে কুনুত পাঠের কিয়াম"
         ),
@@ -441,7 +443,7 @@ object SalahRepository {
             explanationEn = "Masnoon dhikr after every prescribed prayer including Istighfar, Tasbih Fatimi, and Ayat al-Kursi.",
             isObligatory = false,
             reference = "সহিহ মুসলিম: ৫৯১, ৫৯৭; সুনানে নাসায়ী: ৯৯২৮ (সহিহ)",
-            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/001001.mp3",
+            audioUrl = "https://everyayah.com/data/Alafasy_128kbps/002255.mp3",
             imageResId = R.drawable.img_salah_jalsah,
             postureName = "নামাজ শেষে জিকির ও মোনাজাতের বৈঠক"
         )

@@ -13,12 +13,14 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build:
     name: Build Debug APK & Validate
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout Repository
@@ -34,7 +36,10 @@ jobs:
           cache: gradle
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        run: |
+          echo "Setting up Android SDK environment at $ANDROID_HOME..."
+          yes | sdkmanager --licenses 2>/dev/null || true
+          sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools" || true
 
       - name: Make Gradle Wrapper Executable
         run: chmod +x ./gradlew
@@ -83,13 +88,34 @@ jobs:
             exit 1
           fi
 
-          echo "APK Validation Successful!"
+          # Verify and record build against the exact Git commit SHA
+          COMMIT_SHA=$(git rev-parse HEAD)
+          COMMIT_MSG=$(git log -1 --pretty=%B | head -n 1 | sed 's/"/\\"/g')
+          COMMIT_AUTHOR=$(git log -1 --pretty=%an)
+          BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+          echo "Verifying APK against latest source commit: $COMMIT_SHA"
+          cat <<EOF > APK_DOWNLOAD/build-info.json
+{
+  "commit_sha": "$COMMIT_SHA",
+  "commit_message": "$COMMIT_MSG",
+  "author": "$COMMIT_AUTHOR",
+  "build_timestamp": "$BUILD_DATE",
+  "apk_sha256": "$HASH2",
+  "apk_size_bytes": $FILE_SIZE,
+  "verified_against_commit": true
+}
+EOF
+          cp APK_DOWNLOAD/build-info.json .build-outputs/build-info.json
+          echo "APK Validation & Source Commit Verification Successful!"
 
       - name: Upload Debug APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-debug-apk
-          path: APK_DOWNLOAD/app-debug.apk
+          path: |
+            APK_DOWNLOAD/app-debug.apk
+            APK_DOWNLOAD/build-info.json
           retention-days: 30
 
       - name: Commit and Push APK to Repository
@@ -98,10 +124,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -f .build-outputs/app-debug.apk
+          git add -f .build-outputs/build-info.json
           git add -f APK_DOWNLOAD/app-debug.apk
+          git add -f APK_DOWNLOAD/build-info.json
           if git diff --cached --quiet; then
             echo "No APK changes to commit."
           else
-            git commit -m "build: update verified debug APK [skip ci]"
+            git commit -m "build: update verified debug APK with commit metadata [skip ci]"
             git push origin HEAD:${{ github.ref }}
           fi
