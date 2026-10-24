@@ -1,8 +1,10 @@
 package com.example.ui.screens.quran
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,8 +25,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -34,6 +38,9 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -63,6 +70,7 @@ import com.example.repository.QuranRepository
 import com.example.ui.theme.DeepEmerald
 import com.example.ui.theme.QuranicArabicTextStyle
 import com.example.ui.theme.RestrainedGold
+import com.example.util.PrayerTimeCalculator
 import kotlinx.coroutines.launch
 
 @Composable
@@ -75,10 +83,11 @@ fun SurahDetailScreen(
     val surah = remember(surahNumber) {
         QuranRepository.allSurahs.firstOrNull { it.number == surahNumber }
     }
-    val ayahs = remember(surahNumber) {
+    val allAyahs = remember(surahNumber) {
         QuranRepository.getAyahsForSurah(surahNumber)
     }
 
+    var ayahSearchQuery by remember { mutableStateOf("") }
     var showPronunciation by remember { mutableStateOf(true) }
     var showMeaning by remember { mutableStateOf(true) }
     var showEnglish by remember { mutableStateOf(false) }
@@ -86,6 +95,24 @@ fun SurahDetailScreen(
     val context = LocalContext.current
     val clipboardManager = LocalClipboardManager.current
     val scope = rememberCoroutineScope()
+
+    val surahBookmarkId = "surah_$surahNumber"
+    val isSurahBookmarked by bookmarkDao.isBookmarked(surahBookmarkId).collectAsState(initial = false)
+
+    val displayedAyahs = remember(allAyahs, ayahSearchQuery) {
+        val q = ayahSearchQuery.trim().lowercase()
+        if (q.isEmpty()) {
+            allAyahs
+        } else {
+            allAyahs.filter {
+                it.translationBn.lowercase().contains(q) ||
+                it.transliterationBn.lowercase().contains(q) ||
+                it.arabicText.contains(ayahSearchQuery.trim()) ||
+                it.translationEn.lowercase().contains(q) ||
+                it.ayahNumber.toString() == q
+            }
+        }
+    }
 
     if (surah == null) {
         Box(
@@ -120,10 +147,66 @@ fun SurahDetailScreen(
                         .padding(20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    // Surah Number & Bookmark Action Row
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(RestrainedGold.copy(alpha = 0.2f))
+                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                        ) {
+                            Text(
+                                text = "সূরা নং ${PrayerTimeCalculator.toBengaliDigits(surah.number)}",
+                                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                                color = RestrainedGold
+                            )
+                        }
+
+                        // Bookmark Surah Button
+                        IconButton(
+                            onClick = {
+                                scope.launch {
+                                    if (isSurahBookmarked) {
+                                        bookmarkDao.deleteBookmarkById(surahBookmarkId)
+                                        Toast.makeText(context, "সূরাটি বুকমার্ক তালিকা হতে মুছে ফেলা হয়েছে", Toast.LENGTH_SHORT).show()
+                                    } else {
+                                        bookmarkDao.insertBookmark(
+                                            BookmarkEntity(
+                                                id = surahBookmarkId,
+                                                contentType = "QURAN",
+                                                contentId = "surah_${surah.number}",
+                                                title = "সূরা ${surah.nameBn} (${surah.nameAr})",
+                                                arabicText = surah.nameAr,
+                                                translation = "অর্থ: ${surah.meaningBn} • ${PrayerTimeCalculator.toBengaliDigits(surah.totalAyahs)} আয়াত • ${if (surah.revelationType == RevelationType.MECCAN) "মাক্কী" else "মাদানী"}",
+                                                reference = "সূরা নম্বর ${surah.number}"
+                                            )
+                                        )
+                                        Toast.makeText(context, "সম্পূর্ণ সূরা বুকমার্ক করা হয়েছে", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                            },
+                            modifier = Modifier
+                                .size(36.dp)
+                                .testTag("bookmark_surah_button")
+                        ) {
+                            Icon(
+                                imageVector = if (isSurahBookmarked) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                                contentDescription = if (isSurahBookmarked) "বুকমার্ক সরানো" else "সূরা বুকমার্ক করুন",
+                                tint = if (isSurahBookmarked) RestrainedGold else Color.White
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
                     Text(
                         text = surah.nameAr,
                         style = QuranicArabicTextStyle.copy(
-                            fontSize = 28.sp,
+                            fontSize = 30.sp,
                             fontWeight = FontWeight.Bold,
                             color = RestrainedGold
                         )
@@ -143,7 +226,7 @@ fun SurahDetailScreen(
 
                     val revTypeBn = if (surah.revelationType == RevelationType.MECCAN) "মাক্কী সূরা" else "মাদানী সূরা"
                     Text(
-                        text = "$revTypeBn • ${surah.totalAyahs} আয়াত • অর্থ: ${surah.meaningBn}",
+                        text = "$revTypeBn • ${PrayerTimeCalculator.toBengaliDigits(surah.totalAyahs)} আয়াত • অর্থ: ${surah.meaningBn}",
                         style = MaterialTheme.typography.bodySmall,
                         color = Color.White.copy(alpha = 0.85f)
                     )
@@ -176,6 +259,44 @@ fun SurahDetailScreen(
             }
         }
 
+        // In-Surah Ayah Search Field
+        if (allAyahs.isNotEmpty()) {
+            item {
+                OutlinedTextField(
+                    value = ayahSearchQuery,
+                    onValueChange = { ayahSearchQuery = it },
+                    placeholder = { Text("এই সূরায় খুঁজুন (আরবি, উচ্চারণ বা অর্থ)...") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "খুঁজুন",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    },
+                    trailingIcon = {
+                        if (ayahSearchQuery.isNotEmpty()) {
+                            IconButton(onClick = { ayahSearchQuery = "" }) {
+                                Icon(
+                                    imageVector = Icons.Default.Clear,
+                                    contentDescription = "মুছুন",
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    },
+                    singleLine = true,
+                    shape = RoundedCornerShape(12.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("surah_ayah_search_field")
+                )
+            }
+        }
+
         // Display Options Filter Bar (বাংলা উচ্চারণ, বাংলা অর্থ, ইংরেজি)
         item {
             Card(
@@ -184,11 +305,24 @@ fun SurahDetailScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(12.dp)) {
-                    Text(
-                        text = "পঠন ও অনুবাদ নিয়ন্ত্রণ:",
-                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                        color = RestrainedGold
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "পঠন ও অনুবাদ নিয়ন্ত্রণ:",
+                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                            color = RestrainedGold
+                        )
+                        if (allAyahs.isNotEmpty()) {
+                            Text(
+                                text = "প্রদর্শিত: ${PrayerTimeCalculator.toBengaliDigits(displayedAyahs.size)}টি আয়াত",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
                     Spacer(modifier = Modifier.height(6.dp))
                     LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         item {
@@ -237,7 +371,7 @@ fun SurahDetailScreen(
                     Text(
                         text = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
                         style = QuranicArabicTextStyle.copy(
-                            fontSize = 22.sp,
+                            fontSize = 24.sp,
                             color = RestrainedGold,
                             textAlign = TextAlign.Center
                         )
@@ -246,7 +380,7 @@ fun SurahDetailScreen(
             }
         }
 
-        if (ayahs.isEmpty()) {
+        if (allAyahs.isEmpty()) {
             item {
                 Card(
                     shape = RoundedCornerShape(14.dp),
@@ -258,13 +392,13 @@ fun SurahDetailScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "আয়াতভিত্তিক পূর্ণ বিবরণ",
+                            text = "সূরাটির পূর্ণ অডিও তেলাওয়াত উপলব্ধ",
                             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
-                            text = "এই সূরার আয়াতভিত্তিক টেক্সট ও অডিও পর্যালোচনাধীন। আপনি উপরের বাটনে ক্লিক করে শেখ মিশারি রশিদের কণ্ঠে এই সূরার পূর্ণ বিশুদ্ধ তেলাওয়াত শুনতে পারেন।",
+                            text = "এই সূরার আয়াতভিত্তিক টেক্সট ও অনুবাদ বর্তমানে সংযোজন প্রক্রিয়াধীন। আপনি উপরের 'সম্পূর্ণ সূরা অডিও তেলাওয়াত শুনুন' বাটনে চাপ দিয়ে শেখ মিশারি রশিদের কণ্ঠে বিশুদ্ধ তেলাওয়াত উপভোগ করতে পারেন।",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Center
@@ -272,9 +406,31 @@ fun SurahDetailScreen(
                     }
                 }
             }
+        } else if (displayedAyahs.isEmpty()) {
+            item {
+                Card(
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(24.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "\"$ayahSearchQuery\" দিয়ে কোনো আয়াত খুঁজে পাওয়া যায়নি।",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
         } else {
-            items(ayahs, key = { it.id }) { ayah ->
-                val isBookmarked by bookmarkDao.isBookmarked("quran_${ayah.id}")
+            items(displayedAyahs, key = { it.id }) { ayah ->
+                val ayahBookmarkId = "quran_${ayah.id}"
+                val isBookmarked by bookmarkDao.isBookmarked(ayahBookmarkId)
                     .collectAsState(initial = false)
 
                 AyahCard(
@@ -285,21 +441,22 @@ fun SurahDetailScreen(
                     isBookmarked = isBookmarked,
                     onBookmarkToggle = {
                         scope.launch {
-                            val bookmarkId = "quran_${ayah.id}"
                             if (isBookmarked) {
-                                bookmarkDao.deleteBookmarkById(bookmarkId)
+                                bookmarkDao.deleteBookmarkById(ayahBookmarkId)
+                                Toast.makeText(context, "আয়াতটি বুকমার্ক হতে সরানো হয়েছে", Toast.LENGTH_SHORT).show()
                             } else {
                                 bookmarkDao.insertBookmark(
                                     BookmarkEntity(
-                                        id = bookmarkId,
+                                        id = ayahBookmarkId,
                                         contentType = "QURAN",
                                         contentId = "${ayah.surahNumber}:${ayah.ayahNumber}",
-                                        title = "সূরা ${surah.nameBn} - আয়াত ${ayah.ayahNumber}",
+                                        title = "সূরা ${surah.nameBn} - আয়াত ${PrayerTimeCalculator.toBengaliDigits(ayah.ayahNumber)}",
                                         arabicText = ayah.arabicText,
                                         translation = ayah.translationBn,
                                         reference = "সূরা ${surah.nameBn} (${ayah.surahNumber}:${ayah.ayahNumber})"
                                     )
                                 )
+                                Toast.makeText(context, "আয়াতটি বুকমার্ক করা হয়েছে", Toast.LENGTH_SHORT).show()
                             }
                         }
                     },
@@ -312,7 +469,7 @@ fun SurahDetailScreen(
                         clipboardManager.setText(
                             AnnotatedString("${ayah.arabicText}\n\n[বাংলা উচ্চারণ]\n${ayah.transliterationBn}\n\n[বাংলা অর্থ]\n${ayah.translationBn}\n\n— সূরা ${surah.nameBn}: ${ayah.ayahNumber}")
                         )
-                        Toast.makeText(context, "কপি করা হয়েছে", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "আয়াত ও অর্থ কপি করা হয়েছে", Toast.LENGTH_SHORT).show()
                     }
                 )
             }
@@ -360,7 +517,7 @@ fun AyahCard(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "${ayah.ayahNumber}",
+                        text = PrayerTimeCalculator.toBengaliDigits(ayah.ayahNumber),
                         style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -371,7 +528,7 @@ fun AyahCard(
                         IconButton(onClick = onPlayClick, modifier = Modifier.size(36.dp)) {
                             Icon(
                                 imageVector = Icons.Default.PlayArrow,
-                                contentDescription = "আয়াত তেলাওয়াত",
+                                contentDescription = "আয়াত তেলাওয়াত শুনুন",
                                 tint = MaterialTheme.colorScheme.primary
                             )
                         }
@@ -380,7 +537,7 @@ fun AyahCard(
                     IconButton(onClick = onBookmarkToggle, modifier = Modifier.size(36.dp)) {
                         Icon(
                             imageVector = if (isBookmarked) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
-                            contentDescription = "বুকমার্ক",
+                            contentDescription = if (isBookmarked) "বুকমার্ক সরান" else "আয়াত বুকমার্ক করুন",
                             tint = if (isBookmarked) RestrainedGold else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }

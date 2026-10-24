@@ -219,6 +219,11 @@ object QuranRepository {
             Ayah("95_8", 95, 8, "أَلَيْسَ اللَّهُ بِأَحْكَمِ الْحَاكِمِينَ", "আলাইসাল্লাহু বিআহকামিল হাকিমীন", "আল্লাহ কি বিচারকদের মধ্যে সর্বশ্রেষ্ঠ বিচারক নন?", "Is not Allah the most just of judges?", "https://everyayah.com/data/Alafasy_128kbps/095008.mp3")
         ),
         2 to listOf(
+            Ayah("2_1", 2, 1, "الم", "আলিফ-লাম-মীম", "আলিফ-লাম-মীম।", "Alif, Lam, Meem.", "https://everyayah.com/data/Alafasy_128kbps/002001.mp3"),
+            Ayah("2_2", 2, 2, "ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ", "যালিকাল কিতাবু লা রাইবা ফীহ, হুদাল লিল মুত্তাক্বীন", "এ সেই কিতাব, যাতে কোনো সন্দেহ নেই; এটি মুত্তাকীদের (আল্লাহভীরুদের) জন্য পথনির্দেশক।", "This is the Book about which there is no doubt, a guidance for those conscious of Allah -", "https://everyayah.com/data/Alafasy_128kbps/002002.mp3"),
+            Ayah("2_3", 2, 3, "الَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُقِيمُونَ الصَّلَاةَ وَمِمَّا رَزَقْنَاهُمْ يُنفِقُونَ", "আল্লাযীনা ইউ'মিনূনা বিল গাইবি ওয়া ইয়ুক্বীমূনাস-সালাতা ওয়া মিম্মা রাযাক্বনাহুম ইউনফিক্বূন", "যারা অদৃশ্যের প্রতি বিশ্বাস স্থাপন করে, সালাত কায়েম করে এবং আমি তাদের যা জীবিকা দিয়েছি তা থেকে ব্যয় করে,", "Who believe in the unseen, establish prayer, and spend out of what We have provided for them,", "https://everyayah.com/data/Alafasy_128kbps/002003.mp3"),
+            Ayah("2_4", 2, 4, "وَالَّذِينَ يُؤْمِنُونَ بِمَا أُنزِلَ إِلَيْكَ وَمَا أُنزِلَ مِن قَبْلِكَ وَبِالْآخِرَةِ هُمْ يُوقِنُونَ", "ওয়াল্লাযীনা ইউ'মিনূনা বিমা উনযিলা ইলাইকা ওয়ামা উনযিলা মিন ক্বাবলিকা ওয়াবিল আখিরাতি হুম ইউক্বিনূন", "এবং যারা বিশ্বাস করে যা আপনার প্রতি অবতীর্ণ করা হয়েছে এবং যা আপনার পূর্বে অবতীর্ণ করা হয়েছে, আর আখেরাতের প্রতি তারা দৃঢ় বিশ্বাস পোষণ করে।", "And who believe in what has been revealed to you, [O Muhammad], and what was revealed before you, and of the Hereafter they are certain [in faith].", "https://everyayah.com/data/Alafasy_128kbps/002004.mp3"),
+            Ayah("2_5", 2, 5, "أُولَٰئِكَ عَلَىٰ هُدًى مِّن رَّبِّهِمْ ۖ وَأُولَٰئِكَ هُمُ الْمُفْلِحُونَ", "উলা-ইকা 'আলা হুদাম মির রাব্বিহিম ওয়া উলা-ইকা হুমুল মুফলিহূন", "তারাই তাদের প্রতিপালকের সঠিক নির্দেশনার ওপর প্রতিষ্ঠিত এবং তারাই সফলকাম।", "Those are upon [right] guidance from their Lord, and it is those who are the successful.", "https://everyayah.com/data/Alafasy_128kbps/002005.mp3"),
             Ayah(
                 "2_255", 2, 255,
                 "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ",
@@ -226,11 +231,127 @@ object QuranRepository {
                 "আল্লাহ, তিনি ব্যতীত কোনো সত্য উপাস্য নেই। তিনি চিরঞ্জীব, সর্বসত্তার ধারক। তন্দ্রা ও নিদ্রা তাঁকে স্পর্শ করে না। আকাশমণ্ডলী ও পৃথিবীতে যা কিছু আছে সবই তাঁর। কে আছে যে তাঁর অনুমতি ব্যতীত তাঁর নিকট সুপারিশ করবে? তাদের সম্মুখে ও পেছনে যা কিছু আছে সবই তিনি জানেন। তাঁর জ্ঞানের কোনো কিছুই কেউ আয়ত্ত করতে পারে না—তিনি যতটুকু ইচ্ছে করেন তা ব্যতীত। তাঁর কুরসী সমস্ত আকাশমণ্ডলী ও পৃথিবীকে পরিবেষ্টন করে আছে, এবং এ দুয়ের সংরক্ষণ তাঁর জন্য কোনো ক্লান্তিকর কাজ নয়। তিনি সুউচ্চ, মহামহিম।",
                 "Allah - there is no deity except Him, the Ever-Living, the Sustainer of [all] existence. Neither drowsiness overtakes Him nor sleep. To Him belongs whatever is in the heavens and whatever is on the earth...",
                 "https://everyayah.com/data/Alafasy_128kbps/002255.mp3"
+            ),
+            Ayah(
+                "2_285", 2, 285,
+                "آمَنَ الرَّسُولُ بِمَا أُنزِلَ إِلَيْهِ مِن رَّبِّهِ وَالْمُؤْمِنُونَ ۚ كُلٌّ آمَنَ بِاللَّهِ وَمَلَائِكَتِهِ وَكُتُبِهِ وَرُسُلِهِ لَا نُفَرِّقُ بَيْنَ أَحَدٍ مِّن رُّسُلِهِ ۚ وَقَالُوا سَمِعْنَا وَأَطَعْنَا ۖ غُفْرَانَكَ رَبَّنَا وَإِلَيْكَ الْمَصِيرُ",
+                "আমানার-রাসূলু বিমা উনযিলা ইলাইহি মির রাব্বিহী ওয়াল মু'মিনূন, কুল্লুন আমানা বিল্লাহি ওয়া মালাইকাতিহী ওয়া কুতুবিহী ওয়া রুসুলিহ, লা নুফাররিক্বু বাইনা আহাদিম মির রুসুলিহ, ওয়া ক্বালূ সামি'না ওয়া আতা'না গুফরানাকা রাব্বানা ওয়া ইলাইকাল মাসীর",
+                "রাসূল তাঁর প্রতিপালকের পক্ষ থেকে যা তাঁর নিকট অবতীর্ণ করা হয়েছে তার ওপর ঈমান এনেছেন এবং মুমিনগণও। তারা প্রত্যেকেই আল্লাহ, তাঁর ফেরেশতাগণ, তাঁর কিতাবসমূহ এবং তাঁর রাসূলগণের ওপর ঈমান এনেছে। তারা বলে: আমরা তাঁর রাসূলগণের কারো মধ্যে কোনো পার্থক্য করি না। এবং তারা বলে: আমরা শুনলাম ও মান্য করলাম; হে আমাদের প্রতিপালক! আমরা আপনার ক্ষমা প্রার্থনা করি এবং আপনারই দিকে প্রত্যাবর্তনস্থল।",
+                "The Messenger has believed in what was revealed to him from his Lord, and [so have] the believers...",
+                "https://everyayah.com/data/Alafasy_128kbps/002285.mp3"
+            ),
+            Ayah(
+                "2_286", 2, 286,
+                "لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا ۚ لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا اكْتَسَبَتْ ۗ رَبَّنَا لَا تُؤَاخِذْنَا إِن نَّسِينَا أَوْ أَخْطَأْنَا ۚ رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَا إِصْرًا كَمَا حَمَلْتَهُ عَلَى الَّذِينَ مِن قَبْلِنَا ۚ رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِ ۖ وَاعْفُ عَنَّا وَاغْفِرْ لَنَا وَارْحَمْنَا ۚ أَنتَ مَوْلَانَا فَانصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ",
+                "লা ইউকাল্লিফুল্লাহু নাফসান ইল্লা উস'আহা, লাহা মা কাসাবাত ওয়া 'আলাইহা মাকতাসাবাত, রাব্বানা লা তুআখিযনা ইন নাসীনা আও আখতানা...",
+                "আল্লাহ কাউকে তার সাধ্যাতীত কোনো কাজের ভার দেন না। সে যা সৎকাজ করে তা তার জন্যই এবং যা অসৎকাজ করে তা তারই ওপর বর্তাবে। হে আমাদের প্রতিপালক! যদি আমরা ভুলে যাই কিংবা ভুল করি তবে আমাদের পাকড়াও করবেন না। হে আমাদের প্রতিপালক! আমাদের ওপর এমন ভারী বোঝা অর্পণ করবেন না যেরূপ আমাদের পূর্ববর্তীদের ওপর অর্পণ করেছিলেন...",
+                "Allah does not charge a soul except [with that within] its capacity. It will have [the consequence of] what [good] it has gained...",
+                "https://everyayah.com/data/Alafasy_128kbps/002286.mp3"
             )
+        ),
+        108 to listOf(
+            Ayah("108_1", 108, 1, "إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ", "ইন্না আ'তাইনা-কাল কাওসার", "নিশ্চয়ই আমি আপনাকে কাওসার (অফুরন্ত কল্যাণ ও হাউজে কাওসার) দান করেছি।", "Indeed, We have granted you, [O Muhammad], al-Kawthar.", "https://everyayah.com/data/Alafasy_128kbps/108001.mp3"),
+            Ayah("108_2", 108, 2, "فَصَلِّ لِرَبِّكَ وَانْحَرْ", "ফাসাল্লি লিরাব্বিকা ওয়ানহার", "অতএব আপনার রবের উদ্দেশ্যেই সালাত আদায় করুন এবং কোরবানি করুন।", "So pray to your Lord and sacrifice [to Him alone].", "https://everyayah.com/data/Alafasy_128kbps/108002.mp3"),
+            Ayah("108_3", 108, 3, "إِنَّ شَانِئَكَ هُوَ الْأَبْتَرُ", "ইন্না শানি'আকা হুওয়াল আবতার", "নিশ্চয়ই আপনার প্রতি শত্রুতা পোষণকারী ব্যক্তিই নির্বংশ ও মূলহীন।", "Indeed, your enemy is the one cut off.", "https://everyayah.com/data/Alafasy_128kbps/108003.mp3")
+        ),
+        103 to listOf(
+            Ayah("103_1", 103, 1, "وَالْعَصْرِ", "ওয়াল 'আসর", "সময়ের শপথ,", "By time,", "https://everyayah.com/data/Alafasy_128kbps/103001.mp3"),
+            Ayah("103_2", 103, 2, "إِنَّ الْإِنسَانَ لَفِي خُسْرٍ", "ইন্নাল ইনসানা লাফী খুসর", "নিশ্চয়ই সমস্ত মানুষ চরম ক্ষতির মধ্যে নিমজ্জিত,", "Indeed, mankind is in loss,", "https://everyayah.com/data/Alafasy_128kbps/103002.mp3"),
+            Ayah("103_3", 103, 3, "إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ وَتَوَاصَوْا بِالْحَقِّ وَتَوَاصَوْا بِالصَّبْرِ", "ইল্লাল্লাযীনা আমানু ওয়া 'আমিলুস সালিহাতি ওয়া তাওয়াসাও বিল হাক্কি ওয়া তাওয়াসাও বিস-সাবর", "তারা ব্যতীত যারা ঈমান এনেছে, সৎকাজ করেছে এবং পরস্পরকে সত্যের উপদেশ দিয়েছে ও ধৈর্যের উপদেশ দিয়েছে।", "Except for those who have believed and done righteous deeds and advised each other to truth and advised each other to patience.", "https://everyayah.com/data/Alafasy_128kbps/103003.mp3")
+        ),
+        97 to listOf(
+            Ayah("97_1", 97, 1, "إِنَّا أَنزَلْنَاهُ فِي لَيْلَةِ الْقَدْرِ", "ইন্না আনযালনাহু ফী লাইলাতিল ক্বাদর", "নিশ্চয়ই আমি একে (কুরআন মাজীদকে) নাযিল করেছি মহিমান্বিত কদরের রাতে।", "Indeed, We sent the Qur'an down during the Night of Decree.", "https://everyayah.com/data/Alafasy_128kbps/097001.mp3"),
+            Ayah("97_2", 97, 2, "وَمَا أَدْرَاكَ مَا لَيْلَةُ الْقَدْرِ", "ওয়ামা আদরাকা মা লাইলাতুল ক্বাদর", "আর আপনি কি জানেন মহিমান্বিত কদরের রাত কী?", "And what can make you know what is the Night of Decree?", "https://everyayah.com/data/Alafasy_128kbps/097002.mp3"),
+            Ayah("97_3", 97, 3, "لَيْلَةُ الْقَدْرِ خَيْرٌ مِّنْ أَلْفِ شَهْرٍ", "লাইলাতুল ক্বাদরি খাইরুম মিন আলফি শাহর", "কদরের রাত এক হাজার মাসের চেয়েও অধিক শ্রেষ্ঠ ও কল্যাণময়।", "The Night of Decree is better than a thousand months.", "https://everyayah.com/data/Alafasy_128kbps/097003.mp3"),
+            Ayah("97_4", 97, 4, "تَنَزَّلُ الْمَلَائِكَةُ وَالرُّوحُ فِيهَا بِإِذْنِ رَبِّهِم مِّن كُلِّ أَمْرٍ", "তানাযযালুল মালাইকাতু ওয়ার-রূহু ফীহা বিইযনি রাব্বিহিম মিন কুল্লি আমর", "সে রাতে ফেরেশতাগণ ও রূহ (জিবরাঈল আ.) তাদের রবের অনুমতিক্রমে প্রত্যেক কল্যাণময় আদেশ নিয়ে অবতরণ করেন।", "The angels and the Spirit descend therein by permission of their Lord for every matter.", "https://everyayah.com/data/Alafasy_128kbps/097004.mp3"),
+            Ayah("97_5", 97, 5, "سَلَامٌ هِيَ حَتَّىٰ مَطْلَعِ الْفَجْرِ", "সালামুন হিয়া হাত্তা মাতলা'ইল ফাজর", "শান্তিময় ও নিরাপদ এই মহিমান্বিত রাত, যা সুবহে সাদিক (ফজর) উদয় পর্যন্ত অব্যাহত থাকে।", "Peace it is until the emergence of dawn.", "https://everyayah.com/data/Alafasy_128kbps/097005.mp3")
+        ),
+        99 to listOf(
+            Ayah("99_1", 99, 1, "إِذَا زُلْزِلَتِ الْأَرْضُ زِلْزَالَهَا", "ইযা যুলযিলাতিল আরদু যিলযালাহা", "যখন পৃথিবী তার ভয়াবহ কম্পনে প্রকম্পিত হবে,", "When the earth is shaken with its [final] earthquake", "https://everyayah.com/data/Alafasy_128kbps/099001.mp3"),
+            Ayah("99_2", 99, 2, "وَأَخْرَجَتِ الْأَرْضُ أَثْقَالَهَا", "ওয়া আখরাজাতিল আরদু আসক্বালাহা", "এবং পৃথিবী তার ভেতরের ভারী বোঝা বের করে দেবে,", "And the earth discharges its burdens", "https://everyayah.com/data/Alafasy_128kbps/099002.mp3"),
+            Ayah("99_3", 99, 3, "وَقَالَ الْإِنسَانُ مَا لَهَا", "ওয়া ক্বালাল ইনসানু মা লাহা", "আর মানুষ বলবে, এর কী হলো?", "And man says, \"What is [wrong] with it?\" -", "https://everyayah.com/data/Alafasy_128kbps/099003.mp3"),
+            Ayah("99_7", 99, 7, "فَمَن يَعْمَلْ مِثْقَالَ ذَرَّةٍ خَيْرًا يَرَهُ", "ফামাইঁ ইয়া'মাল মিসক্বালা যাররাতিন খাইরাইঁ ইয়ারাহ", "অতএব কেউ অণু পরিমাণও সৎকর্ম করলে সে তা দেখতে পাবে,", "So whoever does an atom's weight of good will see it,", "https://everyayah.com/data/Alafasy_128kbps/099007.mp3"),
+            Ayah("99_8", 99, 8, "وَمَن يَعْمَلْ مِثْقَالَ ذَرَّةٍ شَرًّا يَرَهُ", "ওয়ামাইঁ ইয়া'মাল মিসক্বালা যাররাতিন শাররাইঁ ইয়ারাহ", "আর কেউ অণু পরিমাণও মন্দকাজ করলে সে তাও দেখতে পাবে।", "And whoever does an atom's weight of evil will see it.", "https://everyayah.com/data/Alafasy_128kbps/099008.mp3")
+        ),
+        101 to listOf(
+            Ayah("101_1", 101, 1, "الْقَارِعَةُ", "আল-ক্বারি'আহ", "মহা প্রলয়কারী আঘাত,", "The Striking Calamity -", "https://everyayah.com/data/Alafasy_128kbps/101001.mp3"),
+            Ayah("101_2", 101, 2, "مَا الْقَارِعَةُ", "মাল ক্বারি'আহ", "মহা প্রলয়কারী আঘাত কী?", "What is the Striking Calamity?", "https://everyayah.com/data/Alafasy_128kbps/101002.mp3"),
+            Ayah("101_6", 101, 6, "فَأَمَّا مَن ثَقُلَتْ مَوَازِينُهُ", "ফা আম্মা মান সাকুলাত মাওয়াযীনুহু", "অতঃপর যার নেক আমলের পাল্লা ভারী হবে,", "Then as for one whose scales are heavy [with good deeds],", "https://everyayah.com/data/Alafasy_128kbps/101006.mp3"),
+            Ayah("101_7", 101, 7, "فَهُوَ فِي عِيشَةٍ رَّاضِيَةٍ", "ফাহুওয়া ফী 'ঈশাতির রাদিয়াহ", "সে তো থাকবে সন্তোষজনক পরম সুখময় জীবনে (জান্নাতে)।", "He will be in a pleasant life.", "https://everyayah.com/data/Alafasy_128kbps/101007.mp3")
+        ),
+        102 to listOf(
+            Ayah("102_1", 102, 1, "أَلْهَاكُمُ التَّكَاثُرُ", "আলহাকুমুত-তাকাসুর", "পরস্পরের ধন ও সন্তান বৃদ্ধির প্রতিযোগিতা তোমাদের গাফেল করে রেখেছে,", "Competition in [worldly] increase diverts you", "https://everyayah.com/data/Alafasy_128kbps/102001.mp3"),
+            Ayah("102_2", 102, 2, "حَتَّىٰ زُرْتُمُ الْمَقَابِرَ", "হাত্তা যুরতুমুল মাক্বাবির", "যতক্ষণ না তোমরা কবরস্থানে উপনীত হও।", "Until you visit the graveyards.", "https://everyayah.com/data/Alafasy_128kbps/102002.mp3"),
+            Ayah("102_8", 102, 8, "ثُمَّ لَتُسْأَلُنَّ يَوْمَئِذٍ عَنِ النَّعِيمِ", "সুম্মা লাতুসআলুন্না ইয়াওমাইযিন 'আনিন-না'ঈম", "অতঃপর অবশ্যই সেদিন তোমাদেরকে প্রদত্ত যাবতীয় নিয়ামত সম্পর্কে প্রশ্ন করা হবে।", "Then you will surely be asked that Day about pleasure.", "https://everyayah.com/data/Alafasy_128kbps/102008.mp3")
+        ),
+        104 to listOf(
+            Ayah("104_1", 104, 1, "وَيْلٌ لِّكُلِّ هُمَزَةٍ لُّمَزَةٍ", "ওয়াইলুল লিকুল্লি হুমাযাতিল লুমাযাহ", "ধ্বংস প্রত্যেকের জন্য, যে সামনে ও পেছনে মানুষের দুর্নাম ও পরনিন্দা করে,", "Woe to every scorner and mocker", "https://everyayah.com/data/Alafasy_128kbps/104001.mp3"),
+            Ayah("104_2", 104, 2, "الَّذِي جَمَعَ مَالًا وَعَدَّدَهُ", "আল্লাযী জামা'আ মালাঁও ওয়া 'আদ্দাদাহ", "যে অর্থসম্পদ জমা করে এবং তা বারবার গণনা করে;", "Who collects wealth and [continuously] counts it.", "https://everyayah.com/data/Alafasy_128kbps/104002.mp3")
+        ),
+        67 to listOf(
+            Ayah("67_1", 67, 1, "تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْكُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ", "তাবারাকাল্লাযী বিয়াদিহিল মুলকু ওয়াহুওয়া 'আলা কুল্লি শাইয়িন ক্বাদীর", "পরম বরকতময় ও মহিমান্বিত তিনি, যাঁর হাতে সমস্ত রাজত্ব ও সার্বভৌম কর্তৃত্ব; এবং তিনি সর্ববিষয়ে সর্বশক্তিমান।", "Blessed is He in whose hand is dominion, and He is over all things competent -", "https://everyayah.com/data/Alafasy_128kbps/067001.mp3"),
+            Ayah("67_2", 67, 2, "الَّذِي خَلَقَ الْمَوْتَ وَالْحَيَاةَ لِيَبْلُوَكُمْ أَيُّكُمْ أَحْسَنُ عَمَلًا ۚ وَهُوَ الْعَزِيزُ الْغَفُورُ", "আল্লাযী খালাক্বাল মাওতা ওয়াল হায়াতা লিয়াবলুওয়াকুম আইয়্যুকুম আহসানু 'আমালা, ওয়াহুওয়াল 'আযীযুল গাফূর", "যিনি সৃষ্টি করেছেন মৃত্যু ও জীবন, তোমাদের পরীক্ষা করার জন্য যে কে তোমাদের মধ্যে কর্মে উত্তম; এবং তিনি পরাক্রমশালী, পরম ক্ষমাশীল।", "[He] who created death and life to test you [as to] which of you is best in deed - and He is the Exalted in Might, the Forgiving -", "https://everyayah.com/data/Alafasy_128kbps/067002.mp3"),
+            Ayah("67_3", 67, 3, "الَّذِي خَلَقَ سَبْعَ سَمَاوَاتٍ طِبَاقًا ۖ مَّا تَرَىٰ فِي خَلْقِ الرَّحْمَٰنِ مِن تَفَاوُتٍ ۖ فَارْجِعِ الْبَصَرَ هَلْ تَرَىٰ مِن فُطُورٍ", "আল্লাযী খালাক্বা সাব'আ সামাওয়াতিম তিবা ক্বা, মা তারা ফী খালক্বির-রাহমানি মিন তাফাউত, ফারজি'ইল বাসারা হাল তারা মিন ফুতূর", "যিনি সাত আকাশ সৃষ্টি করেছেন স্তরে স্তরে। পরম দয়াময় আল্লাহর সৃষ্টিতে আপনি কোনো খুঁত দেখতে পাবেন না; দৃষ্টি ফিরিয়ে দেখুন, কোনো ফাটল দেখতে পান কি?", "[And] who created seven heavens in layers. You do not see in the creation of the Most Merciful any inconsistency...", "https://everyayah.com/data/Alafasy_128kbps/067003.mp3"),
+            Ayah("67_4", 67, 4, "ثُمَّ ارْجِعِ الْبَصَرَ كَرَّتَيْنِ يَنقَلِبْ إِلَيْكَ الْبَصَرُ خَاسِئًا وَهُوَ حَسِيرٌ", "সুম্মার জি'ইল বাসারা কাররাতাইনি ইয়ানক্বালিব ইলাইকাল বাসারু খাসিআঁও ওয়াহুওয়া হাসীর", "অতঃপর আপনি বারবার দৃষ্টি নিক্ষেপ করুন, আপনার দৃষ্টি ব্যর্থ ও ক্লান্ত হয়ে আপনার দিকে ফিরে আসবে।", "Then return [your] vision twice again. [Your] vision will return to you humbled while it is fatigued.", "https://everyayah.com/data/Alafasy_128kbps/067004.mp3"),
+            Ayah("67_5", 67, 5, "وَلَقَدْ زَيَّنَّا السَّمَاءَ الدُّنْيَا بِمَصَابِيحَ وَجَعَلْنَاهَا رُجُومًا لِّلشَّيَاطِينِ ۖ وَأَعْتَدْنَا لَهُمْ عَذَابَ السَّعِيرِ", "ওয়া লাক্বাদ যাইয়্যান্নাস-সামাআদ দুনইয়া বিমাসাবীহা ওয়া জা'আলনাহা রুজূমাল লিশ-শায়াতীন...", "এবং নিশ্চয়ই আমি নিকটবর্তী আকাশকে প্রদীপমালা (তারকারাজি) দ্বারা সুশোভিত করেছি এবং সেগুলোকে শয়তানদের বিতাড়নকারী ক্ষেপণাস্ত্র স্বরূপ বানিয়েছি...", "And We have certainly beautified the nearest heaven with stars and have made [from] them what is thrown at the devils...", "https://everyayah.com/data/Alafasy_128kbps/067005.mp3")
+        ),
+        36 to listOf(
+            Ayah("36_1", 36, 1, "يس", "ইয়াসীন", "ইয়াসীন।", "Ya, Seen.", "https://everyayah.com/data/Alafasy_128kbps/036001.mp3"),
+            Ayah("36_2", 36, 2, "وَالْقُرْآنِ الْحَكِيمِ", "ওয়াল ক্বুরআনিল হাকীম", "প্রজ্ঞাপূর্ণ কুরআনের শপথ,", "By the wise Qur'an.", "https://everyayah.com/data/Alafasy_128kbps/036002.mp3"),
+            Ayah("36_3", 36, 3, "إِنَّكَ لَمِنَ الْمُرْسَلِينَ", "ইন্নাকা লামিনাল মুরসালীন", "নিশ্চয়ই আপনি রাসূলগণের একজন,", "Indeed you, [O Muhammad], are from among the messengers,", "https://everyayah.com/data/Alafasy_128kbps/036003.mp3"),
+            Ayah("36_4", 36, 4, "عَلَىٰ صِرَاطٍ مُّسْتَقِيمٍ", "আলা সিরাতিম মুস্তাক্বীম", "সরল ও সঠিক পথের ওপর প্রতিষ্ঠিত।", "On a straight path.", "https://everyayah.com/data/Alafasy_128kbps/036004.mp3"),
+            Ayah("36_5", 36, 5, "تَنزِيلَ الْعَزِيزِ الرَّحِيمِ", "তানযীলাল 'আযীযির রাহীম", "এ কুরআন পরাক্রমশালী, পরম দয়ালু আল্লাহর পক্ষ থেকে অবতীর্ণ,", "[This is] a revelation of the Exalted in Might, the Merciful,", "https://everyayah.com/data/Alafasy_128kbps/036005.mp3"),
+            Ayah("36_6", 36, 6, "لِتُنذِرَ قَوْمًا مَّا أُنذِرَ آبَاؤُهُمْ فَهُمْ غَافِلُونَ", "লিতুনযিরা ক্বাওমাম মা উনযিরা আবাউহুম ফাহুম গাফিলূন", "যাতে আপনি এমন এক জাতিকে সতর্ক করতে পারেন, যাদের পূর্বপুরুষদের সতর্ক করা হয়নি, ফলে তারা অসচেতন ছিল।", "That you may warn a people whose forefathers were not warned, so they are unaware.", "https://everyayah.com/data/Alafasy_128kbps/036006.mp3")
+        ),
+        55 to listOf(
+            Ayah("55_1", 55, 1, "الرَّحْمَٰنُ", "আর-রাহমান", "পরম দয়াময় আল্লাহ,", "The Most Merciful", "https://everyayah.com/data/Alafasy_128kbps/055001.mp3"),
+            Ayah("55_2", 55, 2, "عَلَّمَ الْقُرْآنَ", "'আল্লামাল ক্বুরআন", "তিনিই শিক্ষা দিয়েছেন পবিত্র কুরআন,", "Taught the Qur'an,", "https://everyayah.com/data/Alafasy_128kbps/055002.mp3"),
+            Ayah("55_3", 55, 3, "خَلَقَ الْإِنسَانَ", "খালাক্বাল ইনসান", "তিনি সৃষ্টি করেছেন মানুষকে,", "Created man,", "https://everyayah.com/data/Alafasy_128kbps/055003.mp3"),
+            Ayah("55_4", 55, 4, "عَلَّمَهُ الْبَيَانَ", "'আল্লামাহুল বায়ান", "তাকে শিখিয়েছেন ভাব প্রকাশ ও বর্ণনা করার ক্ষমতা।", "[And] taught him eloquence.", "https://everyayah.com/data/Alafasy_128kbps/055004.mp3"),
+            Ayah("55_13", 55, 13, "فَبِأَيِّ آلَاءِ رَبِّكُمَا تُكَذِّبَانِ", "ফাবিআইয়্যি আলা-ই রাব্বিকুমা তুকায়্যিবান", "অতএব (হে মানুষ ও জিন জাতি!) তোমরা তোমাদের রবের কোন কোন নিয়ামতকে অস্বীকার করবে?", "So which of the favors of your Lord would you deny?", "https://everyayah.com/data/Alafasy_128kbps/055013.mp3")
         )
     )
 
     fun getAyahsForSurah(surahNumber: Int): List<Ayah> {
         return sampleAyahs[surahNumber] ?: emptyList()
+    }
+
+    /**
+     * Search across all available Ayahs by query (in Bengali translation, pronunciation, Arabic text, or English)
+     */
+    fun searchAyahs(query: String): List<Pair<Surah, Ayah>> {
+        val q = query.trim().lowercase()
+        if (q.isEmpty()) return emptyList()
+
+        val results = mutableListOf<Pair<Surah, Ayah>>()
+        for (surah in allSurahs) {
+            val ayahs = getAyahsForSurah(surah.number)
+            for (ayah in ayahs) {
+                if (ayah.translationBn.lowercase().contains(q) ||
+                    ayah.transliterationBn.lowercase().contains(q) ||
+                    ayah.arabicText.contains(query.trim()) ||
+                    ayah.translationEn.lowercase().contains(q) ||
+                    surah.nameBn.lowercase().contains(q) ||
+                    surah.nameEn.lowercase().contains(q)
+                ) {
+                    results.add(surah to ayah)
+                }
+            }
+        }
+        return results
+    }
+
+    /**
+     * Returns all available Ayahs paired with their Surah metadata
+     */
+    fun getAllAvailableAyahs(): List<Pair<Surah, Ayah>> {
+        val list = mutableListOf<Pair<Surah, Ayah>>()
+        for (surah in allSurahs) {
+            val ayahs = getAyahsForSurah(surah.number)
+            for (ayah in ayahs) {
+                list.add(surah to ayah)
+            }
+        }
+        return list
     }
 }

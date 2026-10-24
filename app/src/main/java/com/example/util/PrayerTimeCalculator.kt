@@ -54,6 +54,68 @@ object PrayerTimeCalculator {
     }
 
     /**
+     * Calculates great-circle distance to the Holy Kaaba in kilometers
+     */
+    fun calculateDistanceToKaaba(latitude: Double, longitude: Double): Double {
+        val earthRadiusKm = 6371.0
+        val dLat = Math.toRadians(KAABA_LAT - latitude)
+        val dLng = Math.toRadians(KAABA_LNG - longitude)
+        val a = sin(dLat / 2) * sin(dLat / 2) +
+                cos(Math.toRadians(latitude)) * cos(Math.toRadians(KAABA_LAT)) *
+                sin(dLng / 2) * sin(dLng / 2)
+        val c = 2 * atan2(kotlin.math.sqrt(a), kotlin.math.sqrt(1 - a))
+        return (earthRadiusKm * c * 10.0).roundToInt() / 10.0
+    }
+
+    /**
+     * Convert ASCII numbers to Bengali numerals
+     */
+    fun toBengaliDigits(input: String): String {
+        val bengaliDigits = mapOf(
+            '0' to '০', '1' to '১', '2' to '২', '3' to '৩', '4' to '৪',
+            '5' to '৫', '6' to '৬', '7' to '৭', '8' to '৮', '9' to '৯'
+        )
+        val sb = StringBuilder()
+        for (ch in input) {
+            sb.append(bengaliDigits[ch] ?: ch)
+        }
+        return sb.toString()
+    }
+
+    fun toBengaliDigits(number: Long): String = toBengaliDigits(number.toString())
+    fun toBengaliDigits(number: Int): String = toBengaliDigits(number.toString())
+    fun toBengaliDigits(number: Double, decimals: Int = 1): String {
+        return toBengaliDigits(String.format(Locale.US, "%.${decimals}f", number))
+    }
+
+    /**
+     * Computes solar prayer times for exact latitude and longitude
+     */
+    fun calculatePrayerTimesForCoordinates(
+        calendar: Calendar = Calendar.getInstance(),
+        latitude: Double,
+        longitude: Double,
+        timeZoneOffsetHours: Double,
+        isHanafiAsr: Boolean = true,
+        locationNameBn: String = "বর্তমান লাইভ অবস্থান",
+        locationNameEn: String = "Live GPS Location"
+    ): PrayerTimes {
+        val customLocation = CityLocation(
+            nameBn = locationNameBn,
+            nameEn = locationNameEn,
+            latitude = latitude,
+            longitude = longitude,
+            timeZoneOffsetHours = timeZoneOffsetHours,
+            country = "লাইভ জিপিএস"
+        )
+        return calculatePrayerTimes(
+            calendar = calendar,
+            location = customLocation,
+            isHanafiAsr = isHanafiAsr
+        )
+    }
+
+    /**
      * Computes solar prayer times using Islamic Foundation Bangladesh / Karachi convention
      * Fajr: 18 degrees, Isha: 18 degrees, Maghrib: sunset + 1-2 min safety
      * Asr: Hanafi (shadow ratio 2) or Shafi'i (shadow ratio 1)

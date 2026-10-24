@@ -296,6 +296,7 @@ fun WafaDeenApp(
 
                     composable(Screen.Quran.route) {
                         QuranScreen(
+                            bookmarkDao = bookmarkDao,
                             onSurahClick = { surahNumber ->
                                 navController.navigate(Screen.SurahDetail.createRoute(surahNumber))
                             },

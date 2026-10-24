@@ -46,6 +46,29 @@ class ExampleRobolectricTest {
   }
 
   @Test
+  fun `verify ayah search finds matching verses by bengali translation and arabic`() {
+    val resultsBengali = QuranRepository.searchAyahs("আল্লাহ")
+    assertTrue(resultsBengali.isNotEmpty())
+    assertTrue(resultsBengali.any { it.second.translationBn.contains("আল্লাহ") })
+
+    val resultsArabic = QuranRepository.searchAyahs("الرَّحْمَٰنِ")
+    assertTrue(resultsArabic.isNotEmpty())
+
+    val resultsSalat = QuranRepository.searchAyahs("সালাত")
+    assertTrue(resultsSalat.isNotEmpty())
+  }
+
+  @Test
+  fun `verify get all available ayahs returns verses across multiple surahs`() {
+    val allAyahs = QuranRepository.getAllAvailableAyahs()
+    assertTrue(allAyahs.size >= 50)
+    assertTrue(allAyahs.any { it.first.number == 1 })
+    assertTrue(allAyahs.any { it.first.number == 112 })
+    assertTrue(allAyahs.any { it.first.number == 2 })
+    assertTrue(allAyahs.any { it.first.number == 67 })
+  }
+
+  @Test
   fun `verify hadith repository search finds hadith by keyword and number`() {
     val resultByKeyword = HadithRepository.searchHadiths("নিয়ত")
     assertTrue(resultByKeyword.isNotEmpty())
@@ -84,5 +107,47 @@ class ExampleRobolectricTest {
     assertTrue(times.fajr.contains("AM"))
     assertTrue(times.dhuhr.contains("PM") || times.dhuhr.contains("AM"))
     assertTrue(times.maghrib.contains("PM"))
+  }
+
+  @Test
+  fun `verify distance to kaaba calculation`() {
+    // Dhaka to Kaaba distance is approx 5,160 km
+    val distDhaka = PrayerTimeCalculator.calculateDistanceToKaaba(23.8103, 90.4125)
+    assertTrue("Distance from Dhaka should be ~5,160 km", distDhaka in 4900.0..5400.0)
+
+    // Distance from Kaaba to Kaaba should be ~0 km
+    val distKaaba = PrayerTimeCalculator.calculateDistanceToKaaba(21.4225, 39.8262)
+    assertTrue("Distance from Kaaba to itself should be close to 0", distKaaba < 5.0)
+  }
+
+  @Test
+  fun `verify prayer times for arbitrary live coordinates`() {
+    val cal = Calendar.getInstance().apply {
+      set(Calendar.YEAR, 2026)
+      set(Calendar.MONTH, Calendar.OCTOBER)
+      set(Calendar.DAY_OF_MONTH, 23)
+    }
+
+    // Chittagong coordinates (Lat 22.3569, Lng 91.7832, UTC+6)
+    val times = PrayerTimeCalculator.calculatePrayerTimesForCoordinates(
+      calendar = cal,
+      latitude = 22.3569,
+      longitude = 91.7832,
+      timeZoneOffsetHours = 6.0,
+      isHanafiAsr = true
+    )
+
+    assertNotNull(times.fajr)
+    assertNotNull(times.dhuhr)
+    assertNotNull(times.asr)
+    assertNotNull(times.maghrib)
+    assertNotNull(times.isha)
+  }
+
+  @Test
+  fun `verify bengali digits conversion`() {
+    val bnDigits = PrayerTimeCalculator.toBengaliDigits("2026-10-23 12:45")
+    assertEquals("২০২৬-১০-২৩ ১২:৪৫", bnDigits)
+    assertEquals("৫,১৮২", PrayerTimeCalculator.toBengaliDigits("5,182"))
   }
 }

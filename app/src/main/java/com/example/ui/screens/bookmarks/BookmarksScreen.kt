@@ -172,10 +172,11 @@ fun BookmarkItemCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                val typeName = when (bookmark.contentType) {
-                    "QURAN" -> "কুরআনের আয়াত"
-                    "HADITH" -> "সহিহ হাদিস"
-                    "DUA" -> "মাসনূন দোয়া"
+                val typeName = when {
+                    bookmark.id.startsWith("surah_") -> "পবিত্র কুরআন (সূরা)"
+                    bookmark.contentType == "QURAN" -> "কুরআনের আয়াত"
+                    bookmark.contentType == "HADITH" -> "সহিহ হাদিস"
+                    bookmark.contentType == "DUA" -> "মাসনূন দোয়া"
                     else -> "সংরক্ষিত আমল"
                 }
 
