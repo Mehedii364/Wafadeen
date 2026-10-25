@@ -84,7 +84,49 @@ class ExampleRobolectricTest {
   }
 
   @Test
-  fun `verify hadith repository search finds hadith by keyword and number`() {
+  fun `verify hadith repository contains exactly 200 authentic Bukhari hadiths`() {
+    val hadiths = HadithRepository.hadiths
+    assertEquals(200, hadiths.size)
+
+    val uniqueIds = hadiths.map { it.id }.distinct()
+    assertEquals("All 200 hadiths must have unique IDs", 200, uniqueIds.size)
+
+    hadiths.forEach { hadith ->
+      assertTrue("ID must not be blank for hadith #${hadith.hadithNumber}", hadith.id.isNotBlank())
+      assertTrue("Hadith number must be positive for ${hadith.id}", hadith.hadithNumber > 0)
+      assertTrue("Arabic Matn must not be blank for ${hadith.id}", hadith.arabicMatn.isNotBlank())
+      assertTrue("Bangla translation must not be blank for ${hadith.id}", hadith.banglaTranslation.isNotBlank())
+      assertTrue("Bangla transliteration must not be blank for ${hadith.id}", hadith.banglaTransliteration.isNotBlank())
+      assertTrue("Topic must not be blank for ${hadith.id}", hadith.topic.isNotBlank())
+      assertTrue("Book name Bn must not be blank for ${hadith.id}", hadith.bookNameBn.isNotBlank())
+      assertTrue("Narrator Bn must not be blank for ${hadith.id}", hadith.narratorBn.isNotBlank())
+      assertTrue("Source URL must point to sunnah.com/bukhari for ${hadith.id}", hadith.sourceUrl.contains("sunnah.com/bukhari"))
+      assertEquals("Verification status must be VERIFIED for ${hadith.id}", com.example.data.model.VerificationStatus.VERIFIED, hadith.verificationStatus)
+    }
+  }
+
+  @Test
+  fun `verify hadith repository topics and daily hadith selection`() {
+    val topics = HadithRepository.allTopics
+    assertTrue(topics.contains("সকল"))
+    assertTrue(topics.size >= 15)
+    assertTrue(topics.contains("ঈমান ও আকিদা"))
+    assertTrue(topics.contains("সালাত ও নামাজ"))
+    assertTrue(topics.contains("রোজা ও রমজান"))
+    assertTrue(topics.contains("যাকাত ও সদকা"))
+
+    val imanHadiths = HadithRepository.getHadithsByTopic("ঈমান ও আকিদা")
+    assertTrue("Should have multiple Iman hadiths", imanHadiths.size >= 5)
+    assertTrue(imanHadiths.all { it.topic == "ঈমান ও আকিদা" })
+
+    val dailyHadith = HadithRepository.getDailyHadith()
+    assertNotNull(dailyHadith)
+    assertTrue(dailyHadith.hadithNumber > 0)
+    assertTrue(dailyHadith.arabicMatn.isNotBlank())
+  }
+
+  @Test
+  fun `verify hadith repository search finds hadith by keyword, arabic, number and topic`() {
     val resultByKeyword = HadithRepository.searchHadiths("নিয়ত")
     assertTrue(resultByKeyword.isNotEmpty())
     assertEquals(1, resultByKeyword.first().hadithNumber)
@@ -92,6 +134,13 @@ class ExampleRobolectricTest {
     val resultByNumber = HadithRepository.searchHadiths("8")
     assertTrue(resultByNumber.isNotEmpty())
     assertTrue(resultByNumber.any { it.hadithNumber == 8 })
+
+    val resultByArabic = HadithRepository.searchHadiths("النِّيَّاتِ")
+    assertTrue(resultByArabic.isNotEmpty())
+
+    val resultByTopicFilter = HadithRepository.searchHadiths("", selectedTopic = "সালাত ও নামাজ")
+    assertTrue(resultByTopicFilter.isNotEmpty())
+    assertTrue(resultByTopicFilter.all { it.topic == "সালাত ও নামাজ" })
   }
 
   @Test
